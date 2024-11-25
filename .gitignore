@@ -21,4 +21,5 @@ rad.json
 #Test results file
 TestResults.xml
 .python-version
+#ignore working notebooks
 notebooks/
