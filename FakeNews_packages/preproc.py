@@ -1,5 +1,6 @@
 # imports:
-from polyglot.detect import Detector
+from polyglot import polyglot.Detector
+#from polyglot.detect import Detector
 import numpy as np
 import pandas as pd
 

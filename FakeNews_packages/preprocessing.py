@@ -73,7 +73,7 @@ def lang_detector(texte):
 
 
 #création de colonnes pr la langue du texte et du titre de l'article
-def df_full_eng(dataframe, col_title, col_text ):
+def df_full_eng(dataframe, col_title, col_text):
 
     # applique fct de détection pour les titres/et textes de chacund de nos articles
     dataframe['title_language'] = dataframe[col_title].apply(lang_detector)
@@ -110,4 +110,3 @@ def limite_h_b_mots(dataframe, high_lim_word, low_lim_word):
     df_low_high = df_low[df_low['word_count_text']<= high_lim_word]
 
     return df_low_high
-
