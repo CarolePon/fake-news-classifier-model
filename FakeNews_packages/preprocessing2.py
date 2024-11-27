@@ -1,6 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import string
+import re
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -23,6 +24,24 @@ def drop_na(df):
 # Strip text to remove empty spaces at beginning and end of rows
 def strip_txt(txt: str) -> str:
     return txt.strip()
+
+# remove all internet links (NEW TO ADD)
+def remove_links(txt: str) -> str:
+    url_pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    new_string = re.sub(url_pattern, '', txt)
+    return new_string
+
+# remove selected words from list (NEW TO ADD)
+def remove_selected_words(txt: str, word_list: list):
+    pattern =r'\b(?:' + '|'.join(map(re.escape, word_list)) + r')\b'
+    return re.sub(pattern, '', txt)
+
+# of words in string (NEW TO ADD), returns a number to integrate to a new column of a df
+def word_count(txt: str) -> str:
+    if text is None:
+        text = ""
+    return len(re.findall(r'\S+', text))
+
 
 # move to lower case
 def lower_txt(txt: str) -> str:
