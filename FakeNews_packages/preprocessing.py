@@ -1,4 +1,4 @@
-X# imports:
+# imports:
 from polyglot.detect import Detector
 import numpy as np
 import pandas as pd
@@ -15,7 +15,7 @@ from nltk import word_tokenize
 
 
 
-# Variables: booléens ou limites numéraires e.g. nb de mots/charactères
+# Variables for the functions
 col_title = 'title'
 col_text = 'text'
 high_lim_word = 5000
@@ -36,15 +36,15 @@ def strip_text(df,col_title,col_text):
 
 # Punctuation 1/2 : function to remove punction from string.punctuation
 # # ('!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~')
-def remove_punctuation(text_to_clean):
+def remove_punctuation_text(text_to_clean):
     for punctuation in string.punctuation:
         text_to_clean = text_to_clean.replace(punctuation, ' ')
     return text_to_clean
 
 # Punctuation 2/2 :apply the punctuation function to the dataframe (df)
 def remove_punctuation_df(df,col_title,col_text):
-    df[col_text] = df[col_text].apply(remove_punctuation)
-    df[col_title] = df[col_title].apply(remove_punctuation)
+    df[col_text] = df[col_text].apply(remove_punctuation_text)
+    df[col_title] = df[col_title].apply(remove_punctuation_text)
     return df
 
 # remove numbers from title and text
@@ -54,86 +54,56 @@ def remove_numbers_text(text):
     return words_only
 
 # remove numbers 2/2 : apply function to dataframe
-def remove_numbers(df,col_title,col_text):
+def remove_numbers_df(df,col_title,col_text):
     df[col_title] = df[col_title].apply(remove_numbers_text)
     df[col_text] = df[col_text].apply(remove_numbers_text)
     return df
 
+# move to lower case
+def lowercase_text(text):
+    lowercased = text.lower()
+    return lowercased
 
+def lower_case_df(df,col_title,col_text):
+    df[col_title] = df[col_title].apply(lowercase_text)
+    df[col_text] = df[col_text].apply(lowercase_text)
+    return df
 
-
-
-# fonction de preprocessing pour détecter les langues
-def lang_detector(texte):
-    try:
-        detector = Detector(texte)
-        return detector.language.name
-    except Exception as e:
-        return 'unknown / too short'
-
-
-#création de colonnes pr la langue du texte et du titre de l'article
-def df_full_eng(dataframe, col_title, col_text ):
-
-    # applique fct de détection pour les titres/et textes de chacund de nos articles
-    dataframe['title_language'] = dataframe[col_title].apply(lang_detector)
-    dataframe['text_language'] = dataframe[col_text].apply(lang_detector)
-
-    # crée un df temporaire pr garder que les articles dont le texte est en anglais
-    temp_df = dataframe[dataframe['text_language'] == 'English']
-
-    # # crée le df de retour pr garder que les articles dont le texte et le titre sont en anglais
-    new_df = temp_df[dataframe['title_language'] == 'English']
-
-    # drop colonnes de langues de titre et de texte
-    final_df = new_df.drop(columns=['title_language', 'text_language'])
-
-    return new_df
 
 # function to check the number of words in the string in a column 'col'
-def nb_words_col(dataframe, col):
-    dataframe[f"word_count_{col}"] = dataframe[col].fillna("").str.count(r'\S+')
+def nb_words_col(dataframe, col_text):
+    dataframe[f"word_count_{col_text}"] = dataframe[col_text].fillna("").str.count(r'\S+')
     return dataframe
 
 # create high and low limits to remove outliers in dataset dor a column word_count_'col'
-def limite_h_b_mots(dataframe, col, high_lim_word, low_lim_word):
+def limit_nb_words(dataframe, col_text, high_lim_word, low_lim_word):
     # boolean mask on the datafreme removing rows where number of words < low_limit for the column 'col'
-    df_low = dataframe[dataframe[f"word_count_{col}"]>=low_lim_word]
+    df_low = dataframe[dataframe[f"word_count_{col_text}"]>=low_lim_word]
 
     # df sans les articles ou le nombre de mot est au dessus de la lim haute
-    df_low_high = df_low[df_low[f"word_count_{col}"]<= high_lim_word]
+    df_low_high = df_low[df_low[f"word_count_{col_text}"]<= high_lim_word]
 
     return df_low_high
 
 
-""" code de Baptiste initial:
-# création de colonne nb de mots par article
-def colonne_longeur_article_mot(dataframe, col_text):
-    dataframe['word_count_text'] = dataframe[col_text].fillna("").str.count(r'\S+')
-    return dataframe
+# function to detect and take out all http and https
+def remove_regex(df, col_text, col_title):
+    url_pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    df[col_text] = df[col_text].str.replace(url_pattern, '', regex=True)
+    df[col_title] = df[col_title].str.replace(url_pattern, '', regex=True)
+    return df
 
-# création de colonne nb de mots par titre d'article
-def colonne_longeur_article_mot(dataframe, col_title):
-    dataframe['word_count_title'] = dataframe[col_title].fillna("").str.count(r'\S+')
-    return dataframe
-
-
-# création barrière haute et basse pour nb de mots
-def limite_h_b_mots(dataframe, high_lim_word, low_lim_word):
-    # df sans les articles ou le compte de mot est en dessous de la limite basse
-    df_low = dataframe[dataframe['word_count_text']>=low_lim_word]
-
-    # df sans les articles ou le nombre de mot est au dessus de la lim haute
-    df_low_high = df_low[df_low['word_count_text']<= high_lim_word]
-
-    return df_low_high
-
-    """
+# function to remove the recurring words in our dataframe
+# .com, etc
 
 
-FILE= '/Users/macpro/code/CarolePon/fake-news-classifier-model/raw_data/WELFake_Dataset FOR PROJECT.csv'
+""" STOP ENLEVER APRES """
+FILE= '/Users/macpro/code/CarolePon/fake-news-classifier-model/raw_data/Fake_News_kaggle_english.csv'
+""" STOP ENLEVER APRES """
+
+
 if __name__=="__main__":
-    df= pd.read_csv(FILE, nrows=50)
+    df= pd.read_csv(FILE, nrows= 1000)
 
     temp_df_1 = drop_na(df)
     print(f"drop na OK")
@@ -144,14 +114,23 @@ if __name__=="__main__":
     temp_df_3 = remove_punctuation_df(temp_df_2,col_title,col_text)
     print("remove_punctuation_df OK")
 
-    temp_df_4 = remove_numbers(temp_df_3,col_title,col_text)
+    temp_df_4 = remove_numbers_df(temp_df_3,col_title,col_text)
     print('remove_numbers OK')
 
-    temp_df_5 = nb_words_col(temp_df_4, col_title)
+    temp_df_4_bis = lower_case_df(temp_df_4, col_title,col_text)
+
+    temp_df_5 = nb_words_col(temp_df_4_bis, col_title)
     print('colonne_longeur_article_mot for title ok')
 
     temp_df_6 = nb_words_col(temp_df_5, col_text)
     print('colonne_longeur_article_mot for text ok')
 
-    temp_df_7 = df_full_eng(temp_df_6, col_title, col_text)
-    print('df_full_eng ok')
+    temp_df_7 = limit_nb_words(temp_df_6, col_text,high_lim_word, low_lim_word)
+    print('limit words')
+
+    temp_df_8 = limit_nb_words(temp_df_7, col_text,high_lim_word, low_lim_word)
+    print('limit words')
+
+    print(temp_df_8.head(3))
+    print(temp_df_8.shape)
+    print(temp_df_8.columns)
