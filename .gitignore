@@ -23,4 +23,9 @@ TestResults.xml
 .python-version
 #ignore working notebooks
 notebooks/
+.ipynb_checkpoints
+*.ipynb
+#raw data
 raw_data/
+# fichier auto créé par mac
+.DS_Store
