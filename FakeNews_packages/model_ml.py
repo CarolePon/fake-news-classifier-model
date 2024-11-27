@@ -1,5 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
@@ -12,17 +11,9 @@ from sklearn.pipeline import make_pipeline
 import numpy as np
 
 
-#lien vers les raw_data
-def donnees():
-    file_path = "/home/ludovic/code/CarolePon/fake-news-classifier-model/raw_data/WELFake_Dataset.csv"
-    data = pd.read_csv(file_path, index_col=0)
-    return data
 
-#fonction qui élimine les NAN remove later
-def delete_nan(data):
-    data_cleaned=data.dropna()
-    return data_cleaned
-    
+
+
 
 #fonction qui prend un échantillon de 1000 élements remove later
 def sample (data_cleaned):
@@ -78,16 +69,10 @@ def hyperparams(X, y):
     return grid_search.best_estimator_, grid_search.best_score_ 
 
 
+    #sample
+    #vectorize
 
+    #X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state = 42)
+    #cross_validate(MultinomialNB(), X_train, y_train, cv=5)["test_score"].mean()
 
-if __name__ == "__main__"
-
-donnees
-delete_nan
-sample
-vectorize
-
-X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state = 42)
-cross_validate(MultinomialNB(), X_train, y_train, cv=5)["test_score"].mean()
-
-hyperparams
+    #hyperparams
