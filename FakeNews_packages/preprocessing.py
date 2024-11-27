@@ -1,4 +1,4 @@
-# imports:
+X# imports:
 from polyglot.detect import Detector
 import numpy as np
 import pandas as pd
@@ -90,6 +90,23 @@ def df_full_eng(dataframe, col_title, col_text ):
 
     return new_df
 
+# function to check the number of words in the string in a column 'col'
+def nb_words_col(dataframe, col):
+    dataframe[f"word_count_{col}"] = dataframe[col].fillna("").str.count(r'\S+')
+    return dataframe
+
+# create high and low limits to remove outliers in dataset dor a column word_count_'col'
+def limite_h_b_mots(dataframe, col, high_lim_word, low_lim_word):
+    # boolean mask on the datafreme removing rows where number of words < low_limit for the column 'col'
+    df_low = dataframe[dataframe[f"word_count_{col}"]>=low_lim_word]
+
+    # df sans les articles ou le nombre de mot est au dessus de la lim haute
+    df_low_high = df_low[df_low[f"word_count_{col}"]<= high_lim_word]
+
+    return df_low_high
+
+
+""" code de Baptiste initial:
 # création de colonne nb de mots par article
 def colonne_longeur_article_mot(dataframe, col_text):
     dataframe['word_count_text'] = dataframe[col_text].fillna("").str.count(r'\S+')
@@ -111,3 +128,30 @@ def limite_h_b_mots(dataframe, high_lim_word, low_lim_word):
 
     return df_low_high
 
+    """
+
+
+FILE= '/Users/macpro/code/CarolePon/fake-news-classifier-model/raw_data/WELFake_Dataset FOR PROJECT.csv'
+if __name__=="__main__":
+    df= pd.read_csv(FILE, nrows=50)
+
+    temp_df_1 = drop_na(df)
+    print(f"drop na OK")
+
+    temp_df_2 = strip_text(temp_df_1,col_title,col_text)
+    print("strip_text OK")
+
+    temp_df_3 = remove_punctuation_df(temp_df_2,col_title,col_text)
+    print("remove_punctuation_df OK")
+
+    temp_df_4 = remove_numbers(temp_df_3,col_title,col_text)
+    print('remove_numbers OK')
+
+    temp_df_5 = nb_words_col(temp_df_4, col_title)
+    print('colonne_longeur_article_mot for title ok')
+
+    temp_df_6 = nb_words_col(temp_df_5, col_text)
+    print('colonne_longeur_article_mot for text ok')
+
+    temp_df_7 = df_full_eng(temp_df_6, col_title, col_text)
+    print('df_full_eng ok')
