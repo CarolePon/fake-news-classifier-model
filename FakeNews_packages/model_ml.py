@@ -20,7 +20,7 @@ data_cleaned = get_data_text_df()
 
 #fonction qui prend un échantillon de 1000 élements remove later
 def sample(data_cleaned):
-    data_cleaned_sample=data_cleaned.sample(2000,random_state=42)
+    data_cleaned_sample=data_cleaned.sample(5000,random_state=42)
     return data_cleaned_sample
 
 #definition des X et y
@@ -91,13 +91,13 @@ def hyperparams(X, y):
 
 
 if __name__ == "__main__":
-    sample_data_cleaned=sample(data_cleaned)
+    #sample_data_cleaned=sample(data_cleaned)
     #print(sample_data_cleaned)
     
-    X=variable_X(sample_data_cleaned)
+    X=variable_X(data_cleaned)
     #print(X)
     
-    y=variable_y(sample_data_cleaned)
+    y=variable_y(data_cleaned)
     #print(y)
     
     X_train, X_test, y_train, y_test=train_test(X,y)
