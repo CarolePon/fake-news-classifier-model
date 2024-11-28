@@ -8,6 +8,9 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List
+from params import *
+from data import get_data_text_title_df
+
 
 """ This fucntion takes a string and apply preprocessing functions
 
@@ -30,21 +33,30 @@ def word_count(txt: str) -> str:
     return len(re.findall(r'\S+', txt))
 
 # removes the lines that contain more words than high lim and less words than low lim (NEW TO ADD)
-def lim_nb_of_words(df, column_name, high_lim, low_lim):
-    df['word_count'] = df[column_name].apply(word_count)
+def lim_nb_of_words_title(df, column_title, high_lim, low_lim):
+    df['word_count'] = df[column_title].apply(word_count)
     df_filtered_t = df[df['word_count'] <= high_lim].copy()  # Keep rows with word_count <= limit
     df_filtered = df_filtered_t[df_filtered_t['word_count'] > low_lim].copy()
     df_filtered = df_filtered.drop(columns=['word_count'])
 
     return df_filtered
 
+def lim_nb_of_words_article(df, column_article, high_lim, low_lim):
+    df['word_count'] = df[column_article].apply(word_count)
+    df_filtered_t = df[df['word_count'] <= high_lim].copy()  # Keep rows with word_count <= limit
+    df_filtered = df_filtered_t[df_filtered_t['word_count'] > low_lim].copy()
+    df_filtered = df_filtered.drop(columns=['word_count'])
+
+    return df_filtered
+
+
 # choose columns to feed to the model (NEW TO ADD)
 def column_choice(df, title: bool, article: bool, both: bool):
     if title:
         return pd.DataFrame(df[['title', 'label']])
-    elif article:
+    if article:
         return pd.DataFrame(df[['text', 'label']])
-    elif both:
+    if both:
         df_concat = df['title'] + ' ' + df['text']
         df_concat['label'] = df['label']
         return df_concat
@@ -140,6 +152,7 @@ def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, remove_links_b
                 satellite_adjectives: bool=False,
                 reassemble_txt: bool=True) -> str:
 
+
     #print error if lemmatize true but tokenize false as we want to lemmatize tokens only
     if lemmatize == True and tokenize == False:
         print("can't lemmatize without tokenizing first, please change params")
@@ -180,16 +193,36 @@ FILE= '/home/toji/code/CarolePon/fncm/raw_data/Fake_News_kaggle_english.csv'
 """ STOP ENLEVER APRES """
 
 if __name__=="__main__":
-    df= pd.read_csv(FILE, nrows= 1000)
-    df = drop_na(df)[['title','text']]
-    preprocessed_df = pd.DataFrame()
+    df= get_data_text_title_df()
+    df = drop_na(df)
+    df = lim_nb_of_words_title(df, column_title, high_lim_title, low_lim_title)
+    df = lim_nb_of_words_article(df, column_article, high_lim_article, low_lim_article)
+    df = column_choice(df, title, text, both)
+
     """make a list of the df columns to preprocess"""
-    columns_to_preproc=['title','text']
-    preproc_params={'nouns':True,'verbs':True}
+    preproc_columns = column_choice(df, title, text, both).columns.drop('label')
+    preproc_params={'clean_txt': clean_text,
+                    'strip': Strip,
+                    'remove_links_bool': rem_links,
+                    'remove_selected_words_bool': rem_sel_words,
+                    'list_words_to_remove': word_list,
+                    'lower': lower,
+                    'remove_digits': rem_dig,
+                    'remove_punctuation': rem_pun,
+                    'keep_hashtags': keep_h,
+                    'tokenize': tokens,
+                    'stopwords': stpwords,
+                    'language': language,
+                    'lemmatize': lemmat,
+                    'nouns': nouns,
+                    'verbs': verbs,
+                    'adjectives': adjectives,
+                    'satellite_adjectives': sat_adj,
+                    'reassemble_txt': reassemble_txt
+                    }
 
 
-    for col in columns_to_preproc:
+    for col in preproc_columns:
         df[col] = df[col].apply(preproc_txt, **preproc_params)
     """the '**' before preproc params will unpack the dictionary and pass key=value"""
-
     print(df.head(10))

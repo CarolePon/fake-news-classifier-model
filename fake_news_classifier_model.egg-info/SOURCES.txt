@@ -1,0 +1,15 @@
+README.md
+setup.py
+FakeNews_packages/__init__.py
+FakeNews_packages/data.py
+FakeNews_packages/main.py
+FakeNews_packages/model_ml.py
+FakeNews_packages/params.py
+FakeNews_packages/preprocessing.py
+FakeNews_packages/preprocessing2.py
+FakeNews_packages/utils.py
+fake_news_classifier_model.egg-info/PKG-INFO
+fake_news_classifier_model.egg-info/SOURCES.txt
+fake_news_classifier_model.egg-info/dependency_links.txt
+fake_news_classifier_model.egg-info/requires.txt
+fake_news_classifier_model.egg-info/top_level.txt
