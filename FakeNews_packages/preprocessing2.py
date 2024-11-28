@@ -14,11 +14,41 @@ from typing import List
 """
 
 
+# OPERATIONS ON DFS:
+# order: drop na, removes news for which word count is higher and lower than limits, selects the columns to apply the preprocess to
+
 
 # Function dropna to remove empty IF dataframe
 def drop_na(df):
     cleaned_df= df.dropna()
     return cleaned_df
+
+# of words in string (NEW TO ADD), returns a number to integrate to a new column of a df
+def word_count(txt: str) -> str:
+    if txt is None:
+        txt = ""
+    return len(re.findall(r'\S+', txt))
+
+# removes the lines that contain more words than high lim and less words than low lim (NEW TO ADD)
+def lim_nb_of_words(df, column_name, high_lim, low_lim):
+    df['word_count'] = df[column_name].apply(word_count)
+    df_filtered_t = df[df['word_count'] <= high_lim].copy()  # Keep rows with word_count <= limit
+    df_filtered = df_filtered_t[df_filtered_t['word_count'] > low_lim].copy()
+    df_filtered = df_filtered.drop(columns=['word_count'])
+
+    return df_filtered
+
+# choose columns to feed to the model (NEW TO ADD)
+def column_choice(df, title: bool, article: bool, both: bool):
+    if title:
+        return pd.DataFrame(df[['title', 'label']])
+    elif article:
+        return pd.DataFrame(df[['text', 'label']])
+    elif both:
+        df_concat = df['title'] + ' ' + df['text']
+        df_concat['label'] = df['label']
+        return df_concat
+
 
 
 # Strip text to remove empty spaces at beginning and end of rows
@@ -36,11 +66,6 @@ def remove_selected_words(txt: str, word_list: list):
     pattern =r'\b(?:' + '|'.join(map(re.escape, word_list)) + r')\b'
     return re.sub(pattern, '', txt)
 
-# of words in string (NEW TO ADD), returns a number to integrate to a new column of a df
-def word_count(txt: str) -> str:
-    if text is None:
-        text = ""
-    return len(re.findall(r'\S+', text))
 
 
 # move to lower case
