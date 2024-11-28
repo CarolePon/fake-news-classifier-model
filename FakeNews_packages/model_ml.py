@@ -20,7 +20,7 @@ data_cleaned = get_data_text_df()
 
 #fonction qui prend un échantillon de 1000 élements remove later
 def sample(data_cleaned):
-    data_cleaned_sample=data_cleaned.sample(1000,random_state=42)
+    data_cleaned_sample=data_cleaned.sample(2000,random_state=42)
     return data_cleaned_sample
 
 #definition des X et y
@@ -35,15 +35,15 @@ def train_test(X,y):
     X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state = 42)
     return X_train, X_test, y_train, y_test
 
-def vectorize(X,y):
-    count_vectorizer = TfidfVectorizer()
-    X_bow = count_vectorizer.fit_transform(X)
+def vectorize(X,y, vect_fitted):
+    vectorizer = vect_fitted
+    X_bow = vectorizer.transform(X)
     X_bow.toarray()
     
-    count_vectorizer.get_feature_names_out()
+    vectorizer.get_feature_names_out()
     vectorized_texts = pd.DataFrame(
         X_bow.toarray(),
-        columns = count_vectorizer.get_feature_names_out(),
+        columns = vectorizer.get_feature_names_out(),
         index = X)
 
     return vectorized_texts, y
@@ -55,6 +55,7 @@ def hyperparams(X, y):
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
+        TfidfVectorizer(), 
         MultinomialNB()
         )
     
@@ -79,7 +80,13 @@ def hyperparams(X, y):
 
     # Best score
     print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
-    return grid_search.best_estimator_, grid_search.best_score_ 
+    
+    ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
+    vect = TfidfVectorizer(ngram_range=ngrams)
+    vect_fitted=vect.fit(X,y)
+    
+    
+    return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_ 
 
 
 
@@ -94,7 +101,20 @@ if __name__ == "__main__":
     #print(y)
     
     X_train, X_test, y_train, y_test=train_test(X,y)
-    print(X_train)
+    
+    best_pipeline,vect_fitted=hyperparams(X_train,y_train)
+    
+    
+    vectorize_text,y=vectorize(X_test,y_test,vect_fitted)
+    
+    y_test_predict=(best_pipeline.predict(vectorize_text))
+    
+    print(best_pipeline.score(X_test, y_test))
+    
+    
+    
+    
+    #print(X_train)
     
     #vecteurs_text,y=vectorize(X,y)
     #print(vecteurs_text,y)
