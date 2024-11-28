@@ -1,16 +1,17 @@
 
+from data import get_data_text_title_df, get_data_text_df
+
+# Get the dataframe to run model with text only
+data_title_text = get_data_text_title_df()
 
 
-if __name__ == "__main__":
-    
-    # je recupere mon dataframe
-    # on instancie le modele
-    
-    print(data.head())
-    print(data.shape)
-    
-    sample_df=sample(data)
-    print(sample_df.shape)
-    
-    
-    
+
+# Get the dataframe to run model with title and text
+data_text_only = get_data_text_df()
+
+
+
+
+#if __name__ == "__main__":
+    # print(data_title_text.head())
+    # print(data_text_only.head())
