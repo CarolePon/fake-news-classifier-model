@@ -130,8 +130,8 @@ def lemmatize_tokens_list(tokens_list: List[str],nouns: bool=False,
 def reassemble_txt_post_lemmatization(lem_tokens: List[str]) -> str:
     return  ' '.join(word for word in lem_tokens)
 
-def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, remove_links: bool=True,
-                remove_selected_words: bool=False, list_words_to_remove: List[str]=[''],lower: bool=True,
+def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, remove_links_bool: bool=True,
+                remove_selected_words_bool: bool=False, list_words_to_remove: List[str]=[''],lower: bool=True,
                 remove_digits: bool=True, remove_punctuation: bool=True,
                 keep_hashtags: bool=False, tokenize: bool=True,
                 stopwords: bool=True, language: str='english',
@@ -156,7 +156,7 @@ def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, remove_links: 
         return
 
     if clean_txt == True:
-        txt = basic_txt_cleaning(txt, strip=strip, lower=lower, remove_digits=remove_digits, remove_punctuation=remove_punctuation, keep_hashtags=keep_hashtags)
+        txt = basic_txt_cleaning(txt, strip=strip, remove_links_bool=remove_links_bool,remove_selected_words_bool=remove_selected_words_bool,lower=lower, remove_digits=remove_digits, remove_punctuation=remove_punctuation, keep_hashtags=keep_hashtags)
 
     if tokenize == True:
         txt = tokenize_txt(txt)
@@ -181,7 +181,7 @@ FILE= '/home/toji/code/CarolePon/fncm/raw_data/Fake_News_kaggle_english.csv'
 
 if __name__=="__main__":
     df= pd.read_csv(FILE, nrows= 1000)
-    df = drop_na(df)
+    df = drop_na(df)[['title','text']]
     preprocessed_df = pd.DataFrame()
     """make a list of the df columns to preprocess"""
     columns_to_preproc=['title','text']
