@@ -9,7 +9,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List
 
-""" This fucntion takes a string and apply:
+""" This fucntion takes a string and apply preprocessing functions
 
 """
 
@@ -51,9 +51,11 @@ def column_choice(df, title: bool, article: bool, both: bool):
 
 
 
-# Strip text to remove empty spaces at beginning and end of rows
 def strip_txt(txt: str) -> str:
     return txt.strip()
+
+def lower_txt(txt: str) -> str:
+    return txt.lower()
 
 # remove all internet links (NEW TO ADD)
 def remove_links(txt: str) -> str:
@@ -62,51 +64,47 @@ def remove_links(txt: str) -> str:
     return new_string
 
 # remove selected words from list (NEW TO ADD)
-def remove_selected_words(txt: str, word_list: list):
+def remove_selected_words(txt: str, word_list: List[str]) -> str:
     pattern =r'\b(?:' + '|'.join(map(re.escape, word_list)) + r')\b'
     return re.sub(pattern, '', txt)
 
-
-
-# move to lower case
-def lower_txt(txt: str) -> str:
-    return txt.lower()
-
-# remove the digits
 def remove_digits_txt(txt: str) -> str:
     return  ''.join(char for char in txt if not char.isdigit())
 
-# remove punctuation
 def remove_punctuation_txt(txt: str, keep_hashtags: bool=False) -> str:
-    if keep_hashtags == False:
-        for punctuation in string.punctuation:
-            txt = txt.replace(punctuation, '')
-    else:
-        for punctuation in string.punctuation.replace('#',''):
-            txt = txt.replace(punctuation, '')
+    """"couldn't use the replace method because articles and title had some
+    'fake accents' not part of the string.punctuation list.
+    So instead we create a list of acceptable characters, which are the
+    alphabet letters plus a regular space ' ' (plus '#' if we want to keep
+    the hashtags) and create a txt made of joins of only acceptable chars"""
+
+    allowed_chars = string.ascii_lowercase + string.ascii_uppercase + ' '
+    if keep_hashtags == True:
+        allowed_chars += '#'
+
+    txt= ''.join(c for c in txt if c in allowed_chars)
 
     return txt
 
-# cleaning fucntion taking the above functions
-def basic_txt_cleaning(txt: str, strip: bool=True, lower: bool=True,
+def basic_txt_cleaning(txt: str, strip: bool=True, remove_links_bool: bool=True,
+                       remove_selected_words_bool: bool=False, list_words_to_remove: List[str]=[''], lower: bool=True,
                        remove_digits: bool=True, remove_punctuation: bool=True,
                        keep_hashtags: bool=False) -> str:
     if strip == True: txt = strip_txt(txt)
+    if remove_links_bool == True: txt = remove_links(txt)
+    if remove_selected_words_bool == True: txt=remove_selected_words(txt,list_words_to_remove)
     if lower == True: txt = lower_txt(txt)
     if remove_digits == True: txt = remove_digits_txt(txt)
     if remove_punctuation == True: txt = remove_punctuation_txt(txt, keep_hashtags)
     return txt
 
-
 def tokenize_txt(txt: str) -> List[str]:
     return word_tokenize(txt)
-
 
 def remove_stop_words_from_list(tokens_list: List[str],
                                 language: str='english') -> List[str]:
     stop_words = set(stopwords.words(language))
     return [w for w in tokens_list if not w in stop_words]
-
 
 def lemmatize_tokens_list(tokens_list: List[str],nouns: bool=False,
                           verbs: bool=False, adjectives: bool=False,
@@ -129,12 +127,11 @@ def lemmatize_tokens_list(tokens_list: List[str],nouns: bool=False,
 
     return tokens_list
 
-
 def reassemble_txt_post_lemmatization(lem_tokens: List[str]) -> str:
     return  ' '.join(word for word in lem_tokens)
 
-
-def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, lower: bool=True,
+def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, remove_links: bool=True,
+                remove_selected_words: bool=False, list_words_to_remove: List[str]=[''],lower: bool=True,
                 remove_digits: bool=True, remove_punctuation: bool=True,
                 keep_hashtags: bool=False, tokenize: bool=True,
                 stopwords: bool=True, language: str='english',
@@ -179,14 +176,20 @@ def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, lower: bool=Tr
 
 
 """ STOP ENLEVER APRES """
-FILE= '/Users/macpro/code/CarolePon/fake-news-classifier-model/raw_data/Fake_News_kaggle_english.csv'
+FILE= '/home/toji/code/CarolePon/fncm/raw_data/Fake_News_kaggle_english.csv'
 """ STOP ENLEVER APRES """
-
 
 if __name__=="__main__":
     df= pd.read_csv(FILE, nrows= 1000)
     df = drop_na(df)
     preprocessed_df = pd.DataFrame()
-    df['titlepreproc'] = df['title'].apply(preproc_txt,nouns=True)
+    """make a list of the df columns to preprocess"""
+    columns_to_preproc=['title','text']
+    preproc_params={'nouns':True,'verbs':True}
+
+
+    for col in columns_to_preproc:
+        df[col] = df[col].apply(preproc_txt, **preproc_params)
+    """the '**' before preproc params will unpack the dictionary and pass key=value"""
 
     print(df.head(10))
