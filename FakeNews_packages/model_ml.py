@@ -9,11 +9,9 @@ from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from data import get_data_text_title_df, get_data_text_df
+from preprocessing2 import preproc_txt
 import numpy as np
 
-
-# Get the dataframe to run model with title and text
-data_cleaned = get_data_text_df()
 
 
 
@@ -24,22 +22,19 @@ def sample(data_cleaned):
     return data_cleaned_sample
 
 #definition des X et y
-def variable_X(data_cleaned_sample):
-    X=data_cleaned_sample['text']
+def variable_X(data_cleaned_sample, column_name):
+    X=data_cleaned_sample[column_name]
     return X
-def variable_y(data_cleaned_sample):
-    y=data_cleaned_sample['label']
+def variable_y(data_cleaned_sample, column_name):
+    y=data_cleaned_sample[column_name]
     return(y)
 
-def train_test(X,y):
-    X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state = 42)
-    return X_train, X_test, y_train, y_test
 
 def vectorize(X,y, vect_fitted):
     vectorizer = vect_fitted
     X_bow = vectorizer.transform(X)
     X_bow.toarray()
-    
+
     vectorizer.get_feature_names_out()
     vectorized_texts = pd.DataFrame(
         X_bow.toarray(),
@@ -55,10 +50,10 @@ def hyperparams(X, y):
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
-        TfidfVectorizer(), 
+        TfidfVectorizer(),
         MultinomialNB()
         )
-    
+
     #parameters
     parameters = {
     'tfidfvectorizer__ngram_range': ((1,2),(1,3),(2,3),(2,2)),
@@ -80,49 +75,61 @@ def hyperparams(X, y):
 
     # Best score
     print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
-    
+
     ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
     vect = TfidfVectorizer(ngram_range=ngrams)
     vect_fitted=vect.fit(X,y)
-    
-    
-    return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_ 
+
+
+    return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
 
 
 
 if __name__ == "__main__":
-    #sample_data_cleaned=sample(data_cleaned)
+
+    # Get the dataframe to run model with title and text
+    data_cleaned = get_data_text_df()
+
+
+    sample_nb = 5000
+    sample_data_cleaned = sample(data_cleaned,sample_nb)
     #print(sample_data_cleaned)
-    
-    X=variable_X(data_cleaned)
+
+    preproc_params={'nouns':True,'verbs':True}
+
+    sample_data_cleaned['preproc_text'] = sample_data_cleaned['text'].apply(preproc_txt, **preproc_params)
+
+    preprocessed_data = sample_data_cleaned[['preproc_text','label']]
+
+
+    X=variable_X(preprocessed_data,'preproc_text')
     #print(X)
-    
-    y=variable_y(data_cleaned)
+
+    y=variable_y(preprocessed_data,'label')
     #print(y)
-    
-    X_train, X_test, y_train, y_test=train_test(X,y)
-    
+
+    X_train, X_test, y_train, y_test= train_test_split(X, y,test_size = 0.3)
+
     best_pipeline,vect_fitted=hyperparams(X_train,y_train)
-    
-    
+
+
     vectorize_text,y=vectorize(X_test,y_test,vect_fitted)
-    
+
     y_test_predict=(best_pipeline.predict(vectorize_text))
-    
+
+    print(f"sample number ={sample_nb}")
     print(best_pipeline.score(X_test, y_test))
-    
-    
-    
-    
+
+
+
+
     #print(X_train)
-    
+
     #vecteurs_text,y=vectorize(X,y)
     #print(vecteurs_text,y)
 
-    
+
     #hyperparams
 
     #X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state = 42)
     #cross_validate(MultinomialNB(), X_train, y_train, cv=5)["test_score"].mean()
-
-    
