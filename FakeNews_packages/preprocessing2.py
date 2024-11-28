@@ -8,6 +8,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List
+import params
 
 """ This fucntion takes a string and apply preprocessing functions
 
