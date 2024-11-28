@@ -14,7 +14,7 @@ def  get_data_text_title_df():
     #lire le csv depuis ce path relatif
     data = pd.read_csv(csv_path)
 
-    print(f"✅ Data loaded into dataframe with title and text, shape {data.shape}")
+    print(f"✅ Data loaded into dataframe with title and text, shape {data.shape} and it has {data.columns} columns")
 
     return data
 

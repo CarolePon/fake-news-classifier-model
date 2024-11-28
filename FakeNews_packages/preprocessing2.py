@@ -54,9 +54,9 @@ def lim_nb_of_words_article(df, column_article, high_lim, low_lim):
 def column_choice(df, title: bool, article: bool, both: bool):
     if title:
         return pd.DataFrame(df[['title', 'label']])
-    elif article:
+    if article:
         return pd.DataFrame(df[['text', 'label']])
-    elif both:
+    if both:
         df_concat = df['title'] + ' ' + df['text']
         df_concat['label'] = df['label']
         return df_concat
@@ -225,5 +225,4 @@ if __name__=="__main__":
     for col in preproc_columns:
         df[col] = df[col].apply(preproc_txt, **preproc_params)
     """the '**' before preproc params will unpack the dictionary and pass key=value"""
-
     print(df.head(10))
