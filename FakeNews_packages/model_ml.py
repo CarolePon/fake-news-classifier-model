@@ -8,7 +8,7 @@ from sklearn import set_config; set_config("diagram")
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-from data import get_data_text_title_df, get_data_text_df
+from FakeNews_packages.data import data_source, get_data_text_title_df, get_data_text_df
 from preprocessing2 import preproc_txt
 import numpy as np
 
@@ -16,9 +16,9 @@ import numpy as np
 
 
 
-#fonction qui prend un échantillon de 1000 élements remove later
+#fonction qui prend un échantillon de sample_nb élements remove later
 def sample(data_cleaned):
-    data_cleaned_sample=data_cleaned.sample(5000,random_state=42)
+    data_cleaned_sample=data_cleaned.sample(sample_nb,random_state=42)
     return data_cleaned_sample
 
 #definition des X et y
@@ -88,11 +88,26 @@ def hyperparams(X, y):
 if __name__ == "__main__":
 
     # Get the dataframe to run model with title and text
-    data_cleaned = get_data_text_df()
+    #data_cleaned = get_data_text_df()
+
+    """ test vm"""
+    SOURCE_DATA = "gcs"   # =  "gcs" or "local"
+    # file path where the data is locally saved:
+    LOCAL_FILE_PATH = "../raw_data/Fake_News_kaggle_english.csv"
+    # bucket where the data is saved on gcs:
+    BUCKET_NAME = "fnsm"
+    #name of the file in the bucket = blob name
+    SOURCE_BLOB_NAME = "Fake_News_kaggle_english.csv"
+    # destination_file_name: The path and name where the file will be saved locally on the VM:
+    DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model.csv"
 
 
-    sample_nb = 5000
-    sample_data_cleaned = sample(data_cleaned,sample_nb)
+    data_cleaned_vm = data_source(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
+
+    """test vm fin """
+
+    sample_nb = 1000
+    sample_data_cleaned = sample(data_cleaned_vm,sample_nb)
     #print(sample_data_cleaned)
 
     preproc_params={'nouns':True,'verbs':True}
