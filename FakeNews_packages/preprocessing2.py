@@ -54,12 +54,15 @@ def lim_nb_of_words_article(df, column_article, high_lim, low_lim):
 def column_choice(df, title: bool, article: bool, both: bool):
     if title:
         return pd.DataFrame(df[['title', 'label']])
-    if article:
+    elif article:
         return pd.DataFrame(df[['text', 'label']])
-    if both:
-        df_concat = df['title'] + ' ' + df['text']
+    elif both:
+        df_concat = df.copy()
+        df_concat['text_and_title'] = df['title'] + ' ' + df['text']
         df_concat['label'] = df['label']
-        return df_concat
+        return df_concat[['text_and_title', 'label']]
+    else:
+        return ValueError('at least one of the arguments must be true')
 
 
 
