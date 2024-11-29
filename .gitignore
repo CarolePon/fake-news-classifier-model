@@ -29,3 +29,6 @@ notebooks/
 raw_data/
 # fichier auto créé par mac
 .DS_Store
+# temp pyc file
+__pycache__/
+*.pyc
