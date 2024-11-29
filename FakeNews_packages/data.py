@@ -24,8 +24,6 @@ def data_source(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME
         rootdir=(os.path.dirname(__file__))
         path_for_temp_csv = os.path.join(rootdir,DESTINATION_FILE_NAME)
 
-        print(path_for_temp_csv)
-
         blob.download_to_filename(path_for_temp_csv)
 
         print(f"data_path = {path_for_temp_csv}")
