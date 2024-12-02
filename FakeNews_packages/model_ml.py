@@ -125,12 +125,12 @@ if __name__ == "__main__":
 
     print(f"data being used : {data_cleaned}")
     print(f"data shape : {data_cleaned.shape}")
-    """test vm fin """
+
 
     #sample_nb = data_cleaned.shape[0]
     sample_nb = 1000
     sample_data_cleaned = sample_2(data_cleaned,sample_nb)
-    #print(sample_data_cleaned)
+    print(f"data shape : {sample_data_cleaned}")
 
     # not needed if we take the preprocessed data
     #preproc_params={'nouns':True,'verbs':True}

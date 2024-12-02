@@ -32,6 +32,8 @@ def get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME, DESTINATION_FILE_NAME, 
 
         data_from_gcs = pd.read_csv(path_for_temp_csv)
 
+        data_from_gcs = data_from_gcs.dropna()
+
         return data_from_gcs
 
 
@@ -66,8 +68,21 @@ def get_data_local(columns):
     #lire le csv depuis ce path relatif
     data = pd.read_csv(LOCAL_FILE_PATH)
 
-    data_text_only = data[columns]
+    data_selected_col = data[columns]
 
-    print(f"✅ Data loaded into dataframe with text only, shape {data_text_only.shape}")
+    data_selected_col = data_selected_col.dropna()
 
-    return data_text_only
+    print(f"✅ Data loaded into dataframe with selected column only, shape {data_selected_col.shape}")
+
+    return data_selected_col
+
+
+
+
+
+"""to delete, just for testing"""
+
+if __name__ == "__main__":
+
+    data = get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME, DESTINATION_FILE_NAME, columns)
+    print(f"number of nan : \n {data.isna().sum()}")

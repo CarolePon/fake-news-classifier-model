@@ -67,9 +67,9 @@ reassemble_txt = True
 
 # get the data: either from a local csv or a csv in a bucket in CGP
 # if from locally saved file:
-SOURCE_DATA = "gcs"   # =  "gcs" or "local"
+SOURCE_DATA = "local"   # =  "gcs" or "local"
 #file nalme for data=
-DATA_FILE = "Fake_News_kaggle_english.csv"
+DATA_FILE = "FN_preproc_text.csv"
 # file path where the data is locally saved:
 LOCAL_FILE_PATH = f"../raw_data/{DATA_FILE}"
 # bucket where the data is saved on gcs:
