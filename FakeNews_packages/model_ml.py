@@ -80,7 +80,8 @@ def hyperparams(X, y):
     vect = TfidfVectorizer(ngram_range=ngrams,max_df=0.6)
     vect_fitted=vect.fit(X,y)
 
-    print(f"vectorized X shape = {vect_fitted[0]}")
+    X_transformed = vect.fit_transform(X)
+    print(f"vectorized X shape = {X_transformed}")
 
 
     return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
