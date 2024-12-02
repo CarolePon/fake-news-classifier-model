@@ -17,7 +17,7 @@ import numpy as np
 
 
 #fonction qui prend un échantillon de sample_nb élements remove later
-def sample(data_cleaned,sample_nb):
+def sample_2(data_cleaned,sample_nb):
     data_cleaned_sample=data_cleaned.sample(sample_nb)
     return data_cleaned_sample
 
@@ -85,6 +85,8 @@ def hyperparams(X, y):
 
 
 
+
+
 if __name__ == "__main__":
 
     # Get the dataframe to run model with title and text
@@ -104,10 +106,12 @@ if __name__ == "__main__":
 
     data_cleaned_vm = data_source(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
 
+    print(data_cleaned_vm)
+    print(data_cleaned_vm.shape)
     """test vm fin """
 
     sample_nb = 1000
-    sample_data_cleaned = sample(data_cleaned_vm,sample_nb)
+    sample_data_cleaned = sample_2(data_cleaned_vm,sample_nb)
     #print(sample_data_cleaned)
 
     preproc_params={'nouns':True,'verbs':True}
