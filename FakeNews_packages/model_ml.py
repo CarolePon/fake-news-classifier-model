@@ -17,8 +17,8 @@ import numpy as np
 
 
 #fonction qui prend un échantillon de sample_nb élements remove later
-def sample(data_cleaned):
-    data_cleaned_sample=data_cleaned.sample(sample_nb,random_state=42)
+def sample(data_cleaned,sample_nb):
+    data_cleaned_sample=data_cleaned.sample(sample_nb)
     return data_cleaned_sample
 
 #definition des X et y
