@@ -50,7 +50,7 @@ def hyperparams(X, y):
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
-        TfidfVectorizer(max_df=0.8),
+        TfidfVectorizer(max_df=0.6),
         MultinomialNB()
         )
 
@@ -77,8 +77,10 @@ def hyperparams(X, y):
     print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
 
     ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
-    vect = TfidfVectorizer(ngram_range=ngrams)
+    vect = TfidfVectorizer(ngram_range=ngrams,max_df=0.6)
     vect_fitted=vect.fit(X,y)
+
+    print(f"vectorized X shape = {vect_fitted[0]}")
 
 
     return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
@@ -133,7 +135,7 @@ if __name__ == "__main__":
 
 
     vectorize_text,y=vectorize(X_test,y_test,vect_fitted)
-    print(f"vectorize_text shape : {vectorize_text.shape}")
+    print(f"vectorize_text_test shape : {vectorize_text.shape}")
 
     y_test_predict=(best_pipeline.predict(vectorize_text))
 
