@@ -5,7 +5,6 @@ FakeNews_packages/data.py
 FakeNews_packages/main.py
 FakeNews_packages/model_ml.py
 FakeNews_packages/params.py
-FakeNews_packages/preprocessing.py
 FakeNews_packages/preprocessing2.py
 FakeNews_packages/utils.py
 fake_news_classifier_model.egg-info/PKG-INFO

@@ -1,10 +1,8 @@
-from data import get_data_text_title_df
 
 """
 PARAMS PREPROCESSING
 """
 
-df = get_data_text_title_df
 
 # words limits title:
 column_title = 'title' # "title" or "text"
@@ -59,3 +57,24 @@ adjectives = True
 sat_adj = True
 
 reassemble_txt = True
+
+
+# get the data: either from a local csv or a csv in a bucket in CGP
+# if from locally saved file:
+SOURCE_DATA = "gcs"   # =  "gcs" or "local"
+#file nalme for data=
+DATA_FILE = "Fake_News_kaggle_english.csv"
+# file path where the data is locally saved:
+LOCAL_FILE_PATH = f"../raw_data/{DATA_FILE}"
+# bucket where the data is saved on gcs:
+BUCKET_NAME = "fnsm"
+#name of the file in the bucket = blob name
+SOURCE_BLOB_NAME = DATA_FILE
+# destination_file_name: The path and name where the file will be saved locally on the VM:
+DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model"
+columns = ["text","label"]
+
+
+# ML parameters found with 30,000 samples
+tfidfvectorizer__ngram_range = (2, 3)
+multinomialnb__alpha = 0.1

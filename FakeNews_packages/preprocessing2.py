@@ -1,5 +1,4 @@
 import pandas as pd
-import seaborn as sns
 import string
 import re
 from nltk.tokenize import word_tokenize
@@ -17,6 +16,7 @@ nltk.download('omw-1.4')
 nltk.download('stopwords')
 
 
+""" This function takes a string and apply preprocessing functions
 """ This function takes a string and apply preprocessing functions
 
 """
