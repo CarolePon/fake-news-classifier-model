@@ -133,6 +133,7 @@ if __name__ == "__main__":
 
 
     vectorize_text,y=vectorize(X_test,y_test,vect_fitted)
+    print(f"vectorize_text shape : {vectorize_text.shape}")
 
     y_test_predict=(best_pipeline.predict(vectorize_text))
 
