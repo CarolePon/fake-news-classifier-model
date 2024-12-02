@@ -1,5 +1,4 @@
 import pandas as pd
-import seaborn as sns
 import string
 import re
 from nltk.tokenize import word_tokenize
@@ -9,10 +8,16 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List
 from params import *
-from data import get_data_text_title_df
+
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('stopwords')
 
 
-""" This fucntion takes a string and apply preprocessing functions
+
+""" This function takes a string and apply preprocessing functions
 
 """
 
