@@ -8,7 +8,7 @@ from sklearn import set_config; set_config("diagram")
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-from FakeNews_packages.data import data_source, get_data_text_title_df, get_data_text_df
+from FakeNews_packages.data import get_data_from_gcs, get_data_text_title_df, get_data_text_df
 from preprocessing2 import preproc_txt
 import numpy as np
 
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model.csv"
 
 
-    data_cleaned_vm = data_source(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
+    data_cleaned_vm = get_data_from_gcs(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
 
     print("this is where to look")
     print(data_cleaned_vm)

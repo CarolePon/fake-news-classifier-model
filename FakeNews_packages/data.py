@@ -5,7 +5,7 @@ from google.cloud import storage
 
 
 # function to get the data either from local file or from the GCP bucket
-def data_source(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME):
+def get_data_from_gcs(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME):
 
     # if SOURCE_DATA = "local", error as this function should not run
     if SOURCE_DATA == "local":
@@ -28,7 +28,9 @@ def data_source(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME
 
         print(f"data_path = {path_for_temp_csv}")
 
-        return path_for_temp_csv
+        data_from_gcs = pd.read_csv(path_for_temp_csv)
+
+        return data_from_gcs
 
 
 
