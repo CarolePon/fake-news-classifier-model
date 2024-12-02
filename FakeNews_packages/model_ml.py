@@ -51,7 +51,7 @@ def vectorize(X,y, vect_fitted):
 
 
 #recherche des meilleurs parametres
-def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha,multinomialnb__alpha):
+def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha):
 
     min_df = 20
     max_df = 0.5
@@ -60,8 +60,8 @@ def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha,multino
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
-        TfidfVectorizer(min_df= min_df, max_df=max_df),
-        MultinomialNB()
+        TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df),
+        MultinomialNB(alpha = multinomialnb__alpha)
         )
     print("starting grid search")
 
@@ -91,11 +91,12 @@ def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha,multino
     grid_search.fit(X,y)
 
     # Best score
-    print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
+    #print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
+    print("best params were from sample =30,000")
 
     #ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
     ngrams= tfidfvectorizer__ngram_range
-    vect = TfidfVectorizer(ngram_range=ngrams,min_df= min_df, max_df=max_df, multinomialnb__alpha)
+    vect = TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df)
     vect_fitted=vect.fit(X,y)
     print('fit is over')
 
@@ -156,7 +157,7 @@ if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test= train_test_split(X, y,test_size = 0.3)
 
-    best_pipeline,vect_fitted=hyperparams(X_train,y_train,tfidfvectorizer__ngram_range,multinomialnb__alpha)
+    best_pipeline,vect_fitted=hyperparams(X_train,y_train, tfidfvectorizer__ngram_range, multinomialnb__alpha)
 
 
     vectorize_text,y=vectorize(X_test,y_test,vect_fitted)
