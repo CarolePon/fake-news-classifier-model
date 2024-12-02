@@ -50,7 +50,7 @@ def hyperparams(X, y):
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
-        TfidfVectorizer(),
+        TfidfVectorizer(max_df=0.8),
         MultinomialNB()
         )
 
