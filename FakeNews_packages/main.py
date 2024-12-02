@@ -1,4 +1,4 @@
-
+from preprocessing2 import preproc_training, preproc_predict
 from data import get_data_text_title_df, get_data_text_df
 # Get the dataframe to run model with text only
 data_title_text = get_data_text_title_df()

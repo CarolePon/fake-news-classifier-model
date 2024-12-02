@@ -10,9 +10,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List
 from params import *
 from data import get_data_text_title_df
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('stopwords')
 
 
-""" This fucntion takes a string and apply preprocessing functions
+""" This function takes a string and apply preprocessing functions
 
 """
 
@@ -195,15 +200,23 @@ def preproc_txt(txt: str, clean_txt: bool=True, strip: bool=True, remove_links_b
 FILE= '/home/toji/code/CarolePon/fncm/raw_data/Fake_News_kaggle_english.csv'
 """ STOP ENLEVER APRES """
 
-if __name__=="__main__":
+# if __name__=="__main__":
+# takes as input the boolean desiging if we want the text, the title or the text and title concatenated
+def preproc_training(text:bool, title:bool, both:bool): #text, or title, or both takes 1 and the other takes zeros
     df= get_data_text_title_df()
     df = drop_na(df)
     df = lim_nb_of_words_title(df, column_title, high_lim_title, low_lim_title)
     df = lim_nb_of_words_article(df, column_article, high_lim_article, low_lim_article)
-    df = column_choice(df, title, text, both)
+
+    if title:
+        df = column_choice(df, 1, 0, 0)
+    elif text:
+        df = column_choice(df, 0, 1, 0)
+    elif both:
+        df = column_choice(df, 0, 0, 1)
 
     """make a list of the df columns to preprocess"""
-    preproc_columns = column_choice(df, title, text, both).columns.drop('label')
+    preproc_columns = df.columns.drop('label')
     preproc_params={'clean_txt': clean_text,
                     'strip': Strip,
                     'remove_links_bool': rem_links,
@@ -228,4 +241,39 @@ if __name__=="__main__":
     for col in preproc_columns:
         df[col] = df[col].apply(preproc_txt, **preproc_params)
     """the '**' before preproc params will unpack the dictionary and pass key=value"""
-    print(df.head(10))
+    return df
+
+
+# the input is the text and the booleans refer to the type you want as entries
+# the function return the preprocessed input to feed the model for the prediction
+def preproc_predict(input, text:bool, title:bool, both:bool):
+    preproc_params={'clean_txt': clean_text,
+                    'strip': Strip,
+                    'remove_links_bool': rem_links,
+                    'remove_selected_words_bool': rem_sel_words,
+                    'list_words_to_remove': word_list,
+                    'lower': lower,
+                    'remove_digits': rem_dig,
+                    'remove_punctuation': rem_pun,
+                    'keep_hashtags': keep_h,
+                    'tokenize': tokens,
+                    'stopwords': stpwords,
+                    'language': language,
+                    'lemmatize': lemmat,
+                    'nouns': nouns,
+                    'verbs': verbs,
+                    'adjectives': adjectives,
+                    'satellite_adjectives': sat_adj,
+                    'reassemble_txt': reassemble_txt
+                    }
+    if type(input)==str:
+        if text:
+            X_predict = preproc_txt(text, **preproc_params)
+            return X_predict
+        elif title:
+            X_predict = preproc_txt(text, **preproc_params)
+            return X_predict
+    elif type(input)==list:
+        text_and_title = input[0] + input[1]
+        X_predict = preproc_txt(text_and_title, **preproc_params)
+        return X_predict
