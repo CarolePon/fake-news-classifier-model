@@ -13,7 +13,12 @@ from preprocessing2 import preproc_txt
 import numpy as np
 
 
+# for the timer to be displayed:
+# Import the time library
+import time
 
+# Calculate the start time
+start = time.time()
 
 
 #fonction qui prend un échantillon de sample_nb élements remove later
@@ -58,11 +63,18 @@ def hyperparams(X, y):
         TfidfVectorizer(min_df= min_df, max_df=max_df),
         MultinomialNB()
         )
+    print("starting grid search")
 
     #parameters
+    # parameters = {
+    # 'tfidfvectorizer__ngram_range': ((1,2),(1,3),(2,3),(2,2)),
+    # 'multinomialnb__alpha': (0.1,1)
+    #             }
+
+    # best params from 30,000 samples:
     parameters = {
-    'tfidfvectorizer__ngram_range': ((1,2),(1,3),(2,3),(2,2)),
-    'multinomialnb__alpha': (0.1,1)
+        'tfidfvectorizer__ngram_range': ((2,3)),
+        'multinomialnb__alpha': (0.1)
                 }
 
     # GridSearch
@@ -113,6 +125,10 @@ if __name__ == "__main__":
     # destination_file_name: The path and name where the file will be saved locally on the VM:
     DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model.csv"
 
+    # a changer: prendre depuis params.py
+    tfidfvectorizer__ngram_range = (2, 3)
+    multinomialnb__alpha = 0.1
+
 
     data_cleaned_vm = get_data_from_gcs(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
 
@@ -152,14 +168,8 @@ if __name__ == "__main__":
 
 
 
-
-    #print(X_train)
-
-    #vecteurs_text,y=vectorize(X,y)
-    #print(vecteurs_text,y)
-
-
-    #hyperparams
-
-    #X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state = 42)
-    #cross_validate(MultinomialNB(), X_train, y_train, cv=5)["test_score"].mean()
+    # Calculate the end time and time taken
+    end = time.time()
+    length = end - start
+    # Show the results : this can be altered however you like
+    print("It took: ", length)
