@@ -106,9 +106,8 @@ if __name__ == "__main__":
 
     data_cleaned_vm = get_data_from_gcs(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
 
-    print("this is where to look")
-    print(data_cleaned_vm)
-    print(data_cleaned_vm.shape)
+    print(f"data being used : {data_cleaned_vm}")
+    print(f"data shape : {data_cleaned_vm.shape}")
     """test vm fin """
 
     sample_nb = 1000
