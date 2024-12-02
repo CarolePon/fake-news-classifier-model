@@ -10,8 +10,13 @@ from typing import List
 from params import *
 from data import get_data_text_title_df
 
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
-""" This fucntion takes a string and apply preprocessing functions
+
+""" This function takes a string and apply preprocessing functions
 
 """
 
