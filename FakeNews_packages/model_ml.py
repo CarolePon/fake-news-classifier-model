@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
 
     #sample_nb = data_cleaned.shape[0]
-    sample_nb = 1000
+    sample_nb = 30000
     sample_data_cleaned = sample_2(data_cleaned,sample_nb)
     print(f"data shape : {sample_data_cleaned}")
 
