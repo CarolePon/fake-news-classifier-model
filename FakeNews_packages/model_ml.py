@@ -8,9 +8,11 @@ from sklearn import set_config; set_config("diagram")
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-from FakeNews_packages.data import get_data_from_gcs, get_data_text_title_df, get_data_text_df
+from FakeNews_packages.data import get_data
 from preprocessing2 import preproc_txt
 import numpy as np
+
+from params import *
 
 
 # for the timer to be displayed:
@@ -118,46 +120,31 @@ def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha):
 
 if __name__ == "__main__":
 
-    # Get the dataframe to run model with title and text
-    #data_cleaned = get_data_text_df()
 
-    """ test vm"""
-    SOURCE_DATA = "gcs"   # =  "gcs" or "local"
-    # file path where the data is locally saved:
-    LOCAL_FILE_PATH = "../raw_data/Fake_News_kaggle_english.csv"
-    # bucket where the data is saved on gcs:
-    BUCKET_NAME = "fnsm"
-    #name of the file in the bucket = blob name
-    SOURCE_BLOB_NAME = "Fake_News_kaggle_english.csv"
-    # destination_file_name: The path and name where the file will be saved locally on the VM:
-    DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model.csv"
+    data_cleaned = get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME, columns)
 
-    # a changer: prendre depuis params.py
-    tfidfvectorizer__ngram_range = (2, 3)
-    multinomialnb__alpha = 0.1
-
-
-    data_cleaned_vm = get_data_from_gcs(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
-
-    print(f"data being used : {data_cleaned_vm}")
-    print(f"data shape : {data_cleaned_vm.shape}")
+    print(f"data being used : {data_cleaned}")
+    print(f"data shape : {data_cleaned.shape}")
     """test vm fin """
 
-    sample_nb = data_cleaned_vm.shape[0]
-    sample_data_cleaned = sample_2(data_cleaned_vm,sample_nb)
+    #sample_nb = data_cleaned.shape[0]
+    sample_nb = 1000
+    sample_data_cleaned = sample_2(data_cleaned,sample_nb)
     #print(sample_data_cleaned)
 
-    preproc_params={'nouns':True,'verbs':True}
+    # not needed if we take the preprocessed data
+    #preproc_params={'nouns':True,'verbs':True}
 
-    sample_data_cleaned['preproc_text'] = sample_data_cleaned['text'].apply(preproc_txt, **preproc_params)
+    #sample_data_cleaned['preproc_text'] = sample_data_cleaned['text'].apply(preproc_txt, **preproc_params)
 
-    preprocessed_data = sample_data_cleaned[['preproc_text','label']]
+    # preprocessed_data = sample_data_cleaned[['preproc_text','label']]
 
 
-    X=variable_X(preprocessed_data,'preproc_text')
+    # X=variable_X(sample_data_cleaned,'preproc_text')
+    X=variable_X(sample_data_cleaned,'text')
     #print(X)
 
-    y=variable_y(preprocessed_data,'label')
+    y=variable_y(sample_data_cleaned,'label')
     #print(y)
 
     X_train, X_test, y_train, y_test= train_test_split(X, y,test_size = 0.3)

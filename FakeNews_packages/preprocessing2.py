@@ -8,7 +8,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List
 from params import *
-from data import get_data_text_title_df
 
 import nltk
 nltk.download('punkt')
