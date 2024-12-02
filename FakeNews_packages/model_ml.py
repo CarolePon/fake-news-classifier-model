@@ -118,7 +118,7 @@ if __name__ == "__main__":
     print(f"data shape : {data_cleaned_vm.shape}")
     """test vm fin """
 
-    sample_nb = 1000
+    sample_nb = 30000
     sample_data_cleaned = sample_2(data_cleaned_vm,sample_nb)
     #print(sample_data_cleaned)
 
