@@ -6,7 +6,7 @@ from params import *
 
 
 # function to get the data either from local file or from the GCP bucket
-def get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME, columns):
+def get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME, DESTINATION_FILE_NAME, columns):
 
     # if SOURCE_DATA = "local", error as this function should not run
     if SOURCE_DATA == "local":
@@ -23,8 +23,8 @@ def get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME, c
         blob = bucket.blob(SOURCE_BLOB_NAME)
 
         # Get the path for the locally saved file in the VM (in folder raw_data)
-        rootdir=(os.path.dirname(__file__))
-        path_for_temp_csv = os.path.join(rootdir,DESTINATION_FILE_NAME)
+        rootdir = (os.path.dirname(__file__))
+        path_for_temp_csv = os.path.join(rootdir, DESTINATION_FILE_NAME)
 
         blob.download_to_filename(path_for_temp_csv)
 
