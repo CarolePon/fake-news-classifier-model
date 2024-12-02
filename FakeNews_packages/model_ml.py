@@ -62,7 +62,7 @@ def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha):
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
-        TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df),
+        TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df,max_features=max_features),
         MultinomialNB(alpha = multinomialnb__alpha)
         )
     #print("starting grid search")
@@ -98,7 +98,7 @@ def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha):
 
     #ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
 
-    vect = TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df)
+    vect = TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df,max_features=max_features)
     vect_fitted=vect.fit(X,y)
     print('fit is over')
 
@@ -127,8 +127,8 @@ if __name__ == "__main__":
     print(f"data shape : {data_cleaned.shape}")
 
 
-    #sample_nb = data_cleaned.shape[0]
-    sample_nb = 30000
+    sample_nb = data_cleaned.shape[0]
+    #sample_nb = 30000
     sample_data_cleaned = sample_2(data_cleaned,sample_nb)
     print(f"data shape : {sample_data_cleaned}")
 
