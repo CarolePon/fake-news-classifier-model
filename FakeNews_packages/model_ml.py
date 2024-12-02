@@ -63,7 +63,11 @@ def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha):
         TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df),
         MultinomialNB(alpha = multinomialnb__alpha)
         )
-    print("starting grid search")
+    #print("starting grid search")
+    print("grid esearch bypassed")
+
+    fitted_pipe = pipeline_naive_bayes.fit(X,y)
+
 
     #parameters
     # parameters = {
@@ -72,40 +76,41 @@ def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha):
     #             }
 
     # best params from 30,000 samples:
-    parameters = {
-        'tfidfvectorizer__ngram_range': (2,3),
-        'multinomialnb__alpha': 0.1
-                }
 
-    # GridSearch
-    grid_search = RandomizedSearchCV(
-        pipeline_naive_bayes,
-        parameters,
-        scoring = "accuracy",
-        cv = 5,
-        n_jobs=-1,
-        verbose=1
-        )
+    # # GridSearch
+    # grid_search = RandomizedSearchCV(
+    #     pipeline_naive_bayes,
+    #     parameters,
+    #     scoring = "accuracy",
+    #     cv = 5,
+    #     n_jobs=-1,
+    #     verbose=1
+    #     )
 
     #Fit grid
-    grid_search.fit(X,y)
+    #grid_search.fit(X,y)
 
     # Best score
     #print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
-    print("best params were from sample =30,000")
+    print("best params were from sample =30,000: \n    tfidfvectorizer__ngram_range = (2, 3), \n  multinomialnb__alpha = 0.1")
 
     #ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
-    ngrams= tfidfvectorizer__ngram_range
+
     vect = TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df)
     vect_fitted=vect.fit(X,y)
     print('fit is over')
 
-    for i in range(len(X)+1):
-        X_transformed = vect.fit_transform(X[i:i+1])
-        print(f"vectorized X shape = {X_transformed.shape}")
 
+    X_transformed = vect.fit_transform(X)
+    print(f"vectorized X shape = {X_transformed.shape}")
 
-    return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
+    # for i in range(len(X)+1):
+    #     X_transformed = vect.fit_transform(X[i:i+1])
+    #     print(f"vectorized X shape = {X_transformed.shape}")
+
+    print("returns fitted_pipe, vect_fitted :")
+    #return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
+    return fitted_pipe, vect_fitted #, grid_search.best_score_
 
 
 
