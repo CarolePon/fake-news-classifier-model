@@ -48,9 +48,14 @@ def vectorize(X,y, vect_fitted):
 #recherche des meilleurs parametres
 def hyperparams(X, y):
 
+    min_df = 20
+    max_df = 0.5
+    max_features = X.shape[0]
+
+
     # Pipe
     pipeline_naive_bayes = make_pipeline(
-        TfidfVectorizer(max_df=0.6),
+        TfidfVectorizer(min_df= min_df, max_df=max_df),
         MultinomialNB()
         )
 
@@ -77,7 +82,7 @@ def hyperparams(X, y):
     print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
 
     ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
-    vect = TfidfVectorizer(ngram_range=ngrams,max_df=0.6)
+    vect = TfidfVectorizer(ngram_range=ngrams,min_df= min_df, max_df=max_df)
     vect_fitted=vect.fit(X,y)
 
     X_transformed = vect.fit_transform(X)
