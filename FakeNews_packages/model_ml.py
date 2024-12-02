@@ -143,7 +143,7 @@ if __name__ == "__main__":
     print(f"data shape : {data_cleaned_vm.shape}")
     """test vm fin """
 
-    sample_nb = 1000
+    sample_nb = data_cleaned_vm.shape[0]
     sample_data_cleaned = sample_2(data_cleaned_vm,sample_nb)
     #print(sample_data_cleaned)
 
@@ -179,4 +179,4 @@ if __name__ == "__main__":
     end = time.time()
     length = end - start
     # Show the results : this can be altered however you like
-    print("It took: ", length)
+    print("It took: ", length, "seconds")
