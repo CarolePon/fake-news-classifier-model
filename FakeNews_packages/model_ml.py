@@ -81,7 +81,7 @@ def hyperparams(X, y):
     vect_fitted=vect.fit(X,y)
 
     X_transformed = vect.fit_transform(X)
-    print(f"vectorized X shape = {X_transformed}")
+    print(f"vectorized X shape = {X_transformed.shape}")
 
 
     return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
