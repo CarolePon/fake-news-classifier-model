@@ -106,6 +106,7 @@ if __name__ == "__main__":
 
     data_cleaned_vm = data_source(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME)
 
+    print("this is where to look")
     print(data_cleaned_vm)
     print(data_cleaned_vm.shape)
     """test vm fin """
