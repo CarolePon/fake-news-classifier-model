@@ -23,12 +23,12 @@ import time
 start = time.time()
 
 
-#fonction qui prend un échantillon de sample_nb élements remove later
+# Remove later = sample of the whole data
 def sample_2(data_cleaned,sample_nb):
     data_cleaned_sample=data_cleaned.sample(sample_nb)
     return data_cleaned_sample
 
-#definition des X et y
+#definition of X et y
 def variable_X(data_cleaned_sample, column_name):
     X=data_cleaned_sample[column_name]
     return X
