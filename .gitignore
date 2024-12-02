@@ -32,3 +32,6 @@ raw_data/
 # temp pyc file
 __pycache__/
 *.pyc
+
+.env
+.env.yaml
