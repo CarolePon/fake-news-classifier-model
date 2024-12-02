@@ -51,7 +51,7 @@ def vectorize(X,y, vect_fitted):
 
 
 #recherche des meilleurs parametres
-def hyperparams(X, y):
+def hyperparams(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha,multinomialnb__alpha):
 
     min_df = 20
     max_df = 0.5
@@ -73,8 +73,8 @@ def hyperparams(X, y):
 
     # best params from 30,000 samples:
     parameters = {
-        'tfidfvectorizer__ngram_range': ((2,3)),
-        'multinomialnb__alpha': (0.1)
+        'tfidfvectorizer__ngram_range': (2,3),
+        'multinomialnb__alpha': 0.1
                 }
 
     # GridSearch
@@ -93,8 +93,9 @@ def hyperparams(X, y):
     # Best score
     print(f"Best Score = {grid_search.best_score_}",f"Best params = {grid_search.best_params_}")
 
-    ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
-    vect = TfidfVectorizer(ngram_range=ngrams,min_df= min_df, max_df=max_df)
+    #ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
+    ngrams= tfidfvectorizer__ngram_range
+    vect = TfidfVectorizer(ngram_range=ngrams,min_df= min_df, max_df=max_df, multinomialnb__alpha)
     vect_fitted=vect.fit(X,y)
     print('fit is over')
 
@@ -136,7 +137,7 @@ if __name__ == "__main__":
     print(f"data shape : {data_cleaned_vm.shape}")
     """test vm fin """
 
-    sample_nb = data_cleaned_vm.shape[0]
+    sample_nb = 1000
     sample_data_cleaned = sample_2(data_cleaned_vm,sample_nb)
     #print(sample_data_cleaned)
 
@@ -155,7 +156,7 @@ if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test= train_test_split(X, y,test_size = 0.3)
 
-    best_pipeline,vect_fitted=hyperparams(X_train,y_train)
+    best_pipeline,vect_fitted=hyperparams(X_train,y_train,tfidfvectorizer__ngram_range,multinomialnb__alpha)
 
 
     vectorize_text,y=vectorize(X_test,y_test,vect_fitted)
