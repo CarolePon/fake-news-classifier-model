@@ -18,21 +18,24 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 st.title("Fake News Classifier")
 
 # Interface utilisateur pour entrer une chaîne de caractères
-user_input = st.text_input("Entrez un texte :", "")
+user_title_input = st.text_input("Titre :", "")
+user_text_input = st.text_input("Article :", "")
+
 
 # Bouton pour soumettre la chaîne de caractères
 if st.button("Verification de la véracité de l'article"):
-    if user_input.strip():  # Vérifier que l'entrée n'est pas vide
+    if user_title_input.strip():  # Vérifier que l'entrée n'est pas vide
         # URL de l'API (remplacez cette URL par l'URL réelle de votre API)
         api_url = "https://example.com/api"
-        
+
         # Préparer les données à envoyer
-        payload = {"input_string": user_input}
-        
+        payload = {"title_input_string": user_title_input,
+                   "text_input_string": user_text_input}
+
         try:
             # Envoyer une requête POST à l'API
             response = requests.post(api_url, json=payload)
-            
+
             # Vérifier si la requête a réussi
             if response.status_code == 200:
                 # Extraire la réponse JSON de l'API
@@ -44,4 +47,3 @@ if st.button("Verification de la véracité de l'article"):
             st.error(f"Une erreur s'est produite : {e}")
     else:
         st.warning("Veuillez entrer une chaîne de caractères avant de soumettre.")
-   
