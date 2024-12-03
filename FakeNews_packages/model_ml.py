@@ -137,7 +137,7 @@ def saving_model(X, y,
 
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
 
 
     data_cleaned = get_data(params.SOURCE_DATA, params.BUCKET_NAME, params.SOURCE_BLOB_NAME,params.DESTINATION_FILE_NAME, params.columns)
