@@ -16,7 +16,7 @@ nltk.download('omw-1.4')
 nltk.download('stopwords')
 
 
-""" This function takes a string and apply preprocessing functions
+""" This function takes a string and apply preprocessing functions """
 """ This function takes a string and apply preprocessing functions
 
 """
