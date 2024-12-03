@@ -13,7 +13,6 @@ from scipy import stats
 import random
 from FakeNews_packages import params
 
-from params import *
 
 
 
@@ -158,9 +157,9 @@ if __name__ == "__main__":
     print(f"Run started at : {start}")
 
 
-    data_cleaned = get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME, columns)
+    data_cleaned = get_data(params.SOURCE_DATA, params.BUCKET_NAME, params.SOURCE_BLOB_NAME,params.DESTINATION_FILE_NAME, params.columns)
 
-    print(f"data source for this run : {SOURCE_DATA}, source file name:  {DATA_FILE}")
+    print(f"data source for this run : {params.SOURCE_DATA}, source file name:  {params.DATA_FILE}")
     print(f"data being used (head) : {data_cleaned.head(2)}")
     print(f"data shape : {data_cleaned.shape}")
 
@@ -226,12 +225,12 @@ if __name__ == "__main__":
     if action == "model":
         #running model with parameters chosen after grid search
         print(f"""Running model with best params to test it (found from grid search on sample =30,000):
-              tfidfvectorizer__ngram_range = {tfidfvectorizer__ngram_range},
-              multinomialnb__alpha = {multinomialnb__alpha}
+              tfidfvectorizer__ngram_range = {params.tfidfvectorizer__ngram_range},
+              multinomialnb__alpha = {params.multinomialnb__alpha}
               """)
 
         # run the model
-        fitted_pipe = model_ml(X_train, y_train, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features)
+        fitted_pipe = model_ml(X_train, y_train, params.tfidfvectorizer__ngram_range, params.multinomialnb__alpha, min_df, max_df, max_features)
 
         # apply to  the test data
         vectorize_text,y = vectorize(X_test, y_test, fitted_pipe.named_steps['tfidfvectorizer'])
@@ -248,13 +247,13 @@ if __name__ == "__main__":
     if action == "save_model":
     # Train and save the model
         print(f"""Running model with best parameters save it (found from grid search on sample =30,000):
-              tfidfvectorizer__ngram_range = {tfidfvectorizer__ngram_range},
-              multinomialnb__alpha = {multinomialnb__alpha}
+              tfidfvectorizer__ngram_range = {params.tfidfvectorizer__ngram_range},
+              multinomialnb__alpha = {params.multinomialnb__alpha}
               """)
 
-        trained_model = saving_model(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features,TRAINED_MODEL_DESTINATION_FILE_NAME)
+        trained_model = saving_model(X, y, params.tfidfvectorizer__ngram_range, params.multinomialnb__alpha, min_df, max_df, max_features,params.TRAINED_MODEL_DESTINATION_FILE_NAME)
 
-        print(f"Model saved in {TRAINED_MODEL_DESTINATION_FILE_NAME}")
+        print(f"Model saved in {params.TRAINED_MODEL_DESTINATION_FILE_NAME}")
 
 
 
