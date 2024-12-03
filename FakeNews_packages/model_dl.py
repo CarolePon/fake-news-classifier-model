@@ -1,6 +1,5 @@
 import os.path
 import pandas as pd
-import seaborn as sns
 import string
 import numpy as np
 from nltk.tokenize import word_tokenize
