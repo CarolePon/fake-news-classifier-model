@@ -10,4 +10,4 @@ google-cloud-storage
 fastapi==0.115.5
 uvicorn==0.32.1
 docker==7.1.0
-
+streamlit==1.40.2
