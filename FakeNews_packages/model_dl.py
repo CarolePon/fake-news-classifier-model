@@ -27,12 +27,12 @@ max_words=1000
 test_size=0.2
 val_size=0.2
 dl_dir_path = os.fspath('/home/toji/code/CarolePon/fncm/raw_data')
-embedding_vector_size=300
+embedding_vector_size=30
 embedding_window=5
 vocab_size=10000
 padding_max_length=1000
 batch_size=32
-epochs=1000
+epochs=10
 patience=5
 
 
@@ -259,8 +259,8 @@ def main():
     """get data, clean it, assign X,y"""
     data = pd.read_csv(dataset_path)
     data_clean=get_clean_df(data,col_to_analyze,max_words)
-    X=data_clean[col_to_analyze]
-    y=data_clean['label']
+    X=data_clean[col_to_analyze][:128]
+    y=data_clean['label'][:128]
 
     """embedding, model, training, save model"""
     embedding_matrix, X_train_pad, X_test_pad, y_train, y_test = get_embedding_matrix(X,y,embedding_vector_size=embedding_vector_size,window=embedding_window, vocab_size=vocab_size, padding_max_length=padding_max_length)
