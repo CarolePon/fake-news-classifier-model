@@ -13,6 +13,8 @@ from scipy import stats
 import random
 from FakeNews_packages import params
 
+from params import *
+
 
 
 
@@ -202,7 +204,7 @@ if __name__ == "__main__":
     # 3 options: run grid search, train model (and compare y_test and y_predict) or Save model
     #
     #action = "gridsearch"   # model or gridsearch
-    # action = "model"   # model or gridsearch
+    #action = "model"   # model or gridsearch
     action = "save_model"
 
 
