@@ -11,6 +11,7 @@ background-size: cover;
 </style>
 '''
 
+"changes to variabilize the inputs of the user and thus for the output to adapt if we have both the title and the article"
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
