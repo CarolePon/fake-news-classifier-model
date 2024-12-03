@@ -207,7 +207,7 @@ if __name__ == "__main__":
         #running model with parameters chosen after grid search
         print(f"""Running model with best params to test it (found from grid search on sample =30,000):
               tfidfvectorizer__ngram_range = {params.tfidfvectorizer__ngram_range},
-              multinomialnb_alpha = {params.multinomialnb_alpha}
+              multinomialnb__alpha = {params.multinomialnb__alpha}
               """)
 
         # run the model
@@ -226,9 +226,9 @@ if __name__ == "__main__":
 
     if action == "save_model":
     # Train and save the model
-        print(f"""Running model with best parameters save it (found from grid search on sample =30,000):
+        print(f"""Running model with best parameters save it (found from grid search the whole data):
               tfidfvectorizer__ngram_range = {params.tfidfvectorizer__ngram_range},
-              multinomialnb_alpha = {params.multinomialnb_alpha}
+              multinomialnb__alpha = {params.multinomialnb__alpha}
               """)
 
         trained_model = saving_model(X, y, params.tfidfvectorizer__ngram_range, params.multinomialnb__alpha, min_df, max_df, max_features,params.TRAINED_MODEL_DESTINATION_FILE_NAME)
