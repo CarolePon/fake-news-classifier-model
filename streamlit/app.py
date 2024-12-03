@@ -40,7 +40,7 @@ if st.button("Verification de la véracité de l'article"):
             st.info("Seul le modèle basé sur le texte sera utilisé.")
 
         # Send the request to the API
-        api_url = "https://example.com/api"  # Replace with the real API URL
+        api_url = "https://fake-news-api-210298052123.europe-west1.run.app/"  # Replace with the real API URL
         try:
             response = requests.post(api_url, json=payload)
             if response.status_code == 200:
