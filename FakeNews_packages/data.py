@@ -31,7 +31,7 @@ def get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME, DESTINATION_FILE_NAME, 
 
         data_from_gcs = pd.read_csv(path_for_temp_csv, index_col=0)
 
-        data_selected_col = data[columns]
+        data_selected_col = data_from_gcs[columns]
 
         data_selected_col = data_selected_col.dropna()
 
@@ -67,11 +67,14 @@ def get_data_local(columns):
     # csv_path=(os.path.join(rootdir,file_path))
 
     #lire le csv depuis ce path relatif
-    data = pd.read_csv(params.LOCAL_FILE_PATH)
+
+    data = pd.read_csv(params.LOCAL_FILE_PATH, index_col=0)
+
 
     data_selected_col = data[columns]
 
     data_selected_col = data_selected_col.dropna()
+
 
     print(f"✅ Data loaded into dataframe with selected column only, shape {data_selected_col.shape}")
 
