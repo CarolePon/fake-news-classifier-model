@@ -1,8 +1,7 @@
 import pandas as pd
 import os
 from google.cloud import storage
-
-from params import *
+from FakeNews_packages import params
 
 
 # function to get the data either from local file or from the GCP bucket
@@ -32,29 +31,31 @@ def get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME, DESTINATION_FILE_NAME, 
 
         data_from_gcs = pd.read_csv(path_for_temp_csv, index_col=0)
 
-        data_from_gcs = data_from_gcs.dropna()
+        data_selected_col = data_from_gcs[columns]
 
-        return data_from_gcs
+        data_selected_col = data_selected_col.dropna()
+
+        return data_selected_col
 
 
 
 
 
-# def  get_data_text_title_df():
-#     #lien vers les raw_data
-#     file_path = "../raw_data/Fake_News_kaggle_english.csv"
+def  get_data_text_title_df():
+    #lien vers les raw_data
+    file_path = "../raw_data/Fake_News_kaggle_english.csv"
 
-#     #get current working directory with os library
-#     rootdir=(os.path.dirname(__file__))
-#     #agreger les paths de l'endroit ou l'on se trouve avec le csv
-#     csv_path=(os.path.join(rootdir,file_path))
+    #get current working directory with os library
+    rootdir=(os.path.dirname(__file__))
+    #agreger les paths de l'endroit ou l'on se trouve avec le csv
+    csv_path=(os.path.join(rootdir,file_path))
 
-#     #lire le csv depuis ce path relatif
-#     data = pd.read_csv(csv_path)
+    #lire le csv depuis ce path relatif
+    data = pd.read_csv(csv_path)
 
-#     print(f"✅ Data loaded into dataframe with title and text, shape {data.shape} and it has {data.columns} columns")
+    print(f"✅ Data loaded into dataframe with title and text, shape {data.shape} and it has {data.columns} columns")
 
-#     return data
+    return data
 
 
 def get_data_local(columns):
@@ -66,7 +67,9 @@ def get_data_local(columns):
     # csv_path=(os.path.join(rootdir,file_path))
 
     #lire le csv depuis ce path relatif
-    data = pd.read_csv(LOCAL_FILE_PATH, index_col=0)
+
+    data = pd.read_csv(params.LOCAL_FILE_PATH, index_col=0)
+
 
     data_selected_col = data[columns]
 
@@ -85,5 +88,5 @@ def get_data_local(columns):
 
 if __name__ == "__main__":
 
-    data = get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME, DESTINATION_FILE_NAME, columns)
+    data = get_data(params.SOURCE_DATA, params.BUCKET_NAME, params.SOURCE_BLOB_NAME, params.DESTINATION_FILE_NAME, params.columns)
     print(f"number of nan : \n {data.isna().sum()}")

@@ -6,10 +6,14 @@ from sklearn import set_config; set_config("diagram")
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from FakeNews_packages.data import get_data
+
 import pickle  # to save the best model once fitted
 
+from scipy import stats
+import random
+from FakeNews_packages import params
 
-from params import *
+
 
 
 # for the timer to be displayed:
@@ -259,3 +263,17 @@ if __name__ == "__main__":
     length = end - start
     # Show the results : this can be altered however you like
     print(f"It took: {round(length,0)} seconds")
+
+
+# while we wait for trained models, models that randomly returns fake or real
+def model_text_only():
+    return random.randint(0, 1)
+
+def model_title_only():
+    return random.randint(0, 1)
+
+def model_both():
+    return random.randint(0, 1)
+
+def model_vote():
+    return random.randint(0, 1)
