@@ -27,8 +27,8 @@ if st.button("Verification de la véracité de l'article"):
     if user_title_input.strip() or user_text_input.strip():
         # Prepare payload
         payload = {
-            "title_input_string": user_title_input if user_title_input.strip() else None,
-            "text_input_string": user_text_input if user_text_input.strip() else None,
+            "title_input_string": ["baoerj", "jfeonf", "rjgorko"],#user_title_input if user_title_input.strip() else None,
+            "text_input_string": ["jifren", "ojfjroé", "frokr"]#user_text_input if user_text_input.strip() else None,
         }
 
         # Display which models will be used
@@ -41,14 +41,15 @@ if st.button("Verification de la véracité de l'article"):
 
         # Send the request to the API
         api_url = "https://fake-news-api-210298052123.europe-west1.run.app/"  # Replace with the real API URL
-        try:
-            response = requests.post(api_url, json=payload)
-            if response.status_code == 200:
-                api_response = response.json()
-                st.success(f"Réponse de l'API : {api_response.get('result', 'Aucun résultat retourné')}")
-            else:
-                st.error(f"Erreur de l'API : {response.status_code} - {response.text}")
-        except Exception as e:
-            st.error(f"Une erreur s'est produite : {e}")
-    else:
-        st.warning("Veuillez entrer une chaîne de caractères avant de soumettre.")
+        # try:
+        response = requests.post(api_url, params=payload)
+        st.text(response.status_code)
+    #         if response.status_code == 200:
+    #             api_response = response.json()
+    #             st.success(f"Réponse de l'API : {api_response.get('result', 'Aucun résultat retourné')}")
+    #         else:
+    #             st.error(f"Erreur de l'API : {response.status_code} - {response.text}")
+    #     except Exception as e:
+    #         st.error(f"Une erreur s'est produite : {e}")
+    # else:
+    #     st.warning("Veuillez entrer une chaîne de caractères avant de soumettre.")
