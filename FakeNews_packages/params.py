@@ -80,6 +80,6 @@ TRAINED_MODEL_DESTINATION_FILE_NAME = "../raw_data/Trained_ML_model.pkl"
 columns = ["text","label"]  # or "title"
 
 
-# ML parameters found with 30,000 samples
+# ML parameters found from the grid search
 tfidfvectorizer__ngram_range = (1,3)
 multinomialnb__alpha = 0.221076

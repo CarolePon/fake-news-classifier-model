@@ -6,16 +6,10 @@ from sklearn import set_config; set_config("diagram")
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from FakeNews_packages.data import get_data
-
 import pickle  # to save the best model once fitted
-
 from scipy import stats
 import random
 from FakeNews_packages import params
-
-from params import *
-
-
 
 
 # for the timer to be displayed:
@@ -25,11 +19,11 @@ import time
 # Calculate the start time
 start = time.time()
 
-
 # Remove later = sample of the whole data
 def sample_2(data_cleaned,sample_nb):
     data_cleaned_sample=data_cleaned.sample(sample_nb)
     return data_cleaned_sample
+
 
 #definition of X et y
 def variable_X(data_cleaned_sample, column_name):
@@ -44,31 +38,26 @@ def vectorize(X,y, vect_fitted):
     vectorizer = vect_fitted
     X_bow = vectorizer.transform(X)
     X_bow.toarray()
-
     vectorizer.get_feature_names_out()
     vectorized_texts = pd.DataFrame(
         X_bow.toarray(),
         columns = vectorizer.get_feature_names_out(),
         index = X)
-
     return vectorized_texts, y
 
 
 #looking for the best parameters: randomized grid search
 def hyperparams(X, y, min_df, max_df, max_features):
-
     # Pipe
     pipeline_naive_bayes = make_pipeline(
         TfidfVectorizer(min_df= min_df, max_df=max_df, max_features=max_features),
         MultinomialNB()
         )
-
     #parameters
     parameters = {
     'tfidfvectorizer__ngram_range': ((2,3),(2,2),(3,3)),
     'multinomialnb__alpha': stats.uniform(0.1, 1)
                 }
-
     # GridSearch
     grid_search = RandomizedSearchCV(
         pipeline_naive_bayes,
@@ -93,14 +82,11 @@ def hyperparams(X, y, min_df, max_df, max_features):
     vect = TfidfVectorizer(ngram_range=ngrams, max_features=max_features)
     vect_fitted= vect.fit(X,y)
 
-
     return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
-
 
 
 #recherche des meilleurs parametres
 def model_ml(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features):
-
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
@@ -109,28 +95,22 @@ def model_ml(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, m
         )
 
     fitted_pipe = pipeline_naive_bayes.fit(X,y)
-    print('model is fitted')
 
+    print('model is fitted')
 
     # vectorizer_params = pipeline_naive_bayes.named_steps['tfidfvectorizer'].get_params()
     # print(vectorizer_params)
-
     #vect = TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df,max_features=max_features)
     #vect_fitted = vect.fit(X,y)
-
-
-
     #X_transformed = vect.fit_transform(X)
     #print(f"vectorized X shape = {X_transformed.shape}")
-
     # for i in range(len(X)+1):
     #     X_transformed = vect.fit_transform(X[i:i+1])
     #     print(f"vectorized X shape = {X_transformed.shape}")
 
     print("returns fitted model")
+
     return fitted_pipe#, vect_fitted
-
-
 
 
 #save the trained model
@@ -147,29 +127,34 @@ def saving_model(X, y,
     fitted_pipe = pipeline_naive_bayes.fit(X,y)
 
     print(f"model saved as : {TRAINED_MODEL_DESTINATION_FILE_NAME}")
+
     pickle.dump(fitted_pipe, open(TRAINED_MODEL_DESTINATION_FILE_NAME, 'wb'))  # where we store the model weights
 
     return fitted_pipe
 
 
 
-if __name__ == "__main__":
-
-    print(f"Run started at : {start}")
 
 
-    data_cleaned = get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME,DESTINATION_FILE_NAME, columns)
 
-    print(f"data source for this run : {SOURCE_DATA}, source file name:  {DATA_FILE}")
+if _name_ == "_main_":
+
+
+    data_cleaned = get_data(params.SOURCE_DATA, params.BUCKET_NAME, params.SOURCE_BLOB_NAME,params.DESTINATION_FILE_NAME, params.columns)
+
+    print(f"data source for this run : {params.SOURCE_DATA}, source file name:  {params.DATA_FILE}")
     print(f"data being used (head) : {data_cleaned.head(2)}")
     print(f"data shape : {data_cleaned.shape}")
 
 
     sample_nb = data_cleaned.shape[0]
+
+    #choose sample size
     #sample_nb = 1000
     sample_data_cleaned = sample_2(data_cleaned,sample_nb)
 
-    # print info if the model is run opn the whole datset ofr a sample
+
+    # print info if the model is run on the whole datset for a sample
     if sample_nb < data_cleaned.shape[0]:
         print(f"Sample size for this run: {sample_nb}, sample_data shape: {sample_data_cleaned.shape}")
     else:
@@ -179,25 +164,20 @@ if __name__ == "__main__":
 
     """preprocessing step not needed anymore as we now have csv that are preprocessed """
     #preproc_params={'nouns':True,'verbs':True}
-
     #sample_data_cleaned['preproc_text'] = sample_data_cleaned['text'].apply(preproc_txt, **preproc_params)
-
     # preprocessed_data = sample_data_cleaned[['preproc_text','label']]
     """preprocessing step not needed anymore as we now have csv that are preprocessed """
 
 
-
     X = variable_X(sample_data_cleaned,'text')
-
     y = variable_y(sample_data_cleaned,'label')
-
     X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3)
-
 
     # Parameters of the vectorizer to limit the number of vectors created
     min_df = 20
     max_df = 0.5
     max_features = int(X.shape[0]/2)
+
     print(f"max_feature = {max_features}")
 
 
@@ -205,15 +185,16 @@ if __name__ == "__main__":
     #
     #action = "gridsearch"   # model or gridsearch
     #action = "model"   # model or gridsearch
-    action = "save_model"
 
+    action = "save_model"
 
     if action == "gridsearch":
         #Grid search with the above parameters
         print(f"Running Grid Search pipeline to get the best model parameters")
-        best_pipeline,vect_fitted = hyperparams(X_train,y_train, min_df, max_df, max_features)
 
+        best_pipeline,vect_fitted = hyperparams(X_train,y_train, min_df, max_df, max_features)
         vectorize_text,y = vectorize(X_test, y_test,vect_fitted)
+
         print(f"vectorize_X_test shape : {vectorize_text.shape}")
 
         y_test_predict=(best_pipeline.predict(vectorize_text))
@@ -222,21 +203,19 @@ if __name__ == "__main__":
         print(f"result of gridsearch: best pipeline score: {best_pipeline.score(X_test, y_test)}")
 
 
-
     if action == "model":
         #running model with parameters chosen after grid search
         print(f"""Running model with best params to test it (found from grid search on sample =30,000):
-              tfidfvectorizer__ngram_range = {tfidfvectorizer__ngram_range},
-              multinomialnb__alpha = {multinomialnb__alpha}
+              tfidfvectorizer__ngram_range = {params.tfidfvectorizer__ngram_range},
+              multinomialnb_alpha = {params.multinomialnb_alpha}
               """)
 
         # run the model
-        fitted_pipe = model_ml(X_train, y_train, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features)
+        fitted_pipe = model_ml(X_train, y_train, params.tfidfvectorizer__ngram_range, params.multinomialnb__alpha, min_df, max_df, max_features)
 
         # apply to  the test data
         vectorize_text,y = vectorize(X_test, y_test, fitted_pipe.named_steps['tfidfvectorizer'])
         print(f"vectorize_text_test shape : {vectorize_text.shape}")
-
 
         # get prediction
         y_test_predict=(fitted_pipe.predict(vectorize_text))
@@ -248,16 +227,12 @@ if __name__ == "__main__":
     if action == "save_model":
     # Train and save the model
         print(f"""Running model with best parameters save it (found from grid search on sample =30,000):
-              tfidfvectorizer__ngram_range = {tfidfvectorizer__ngram_range},
-              multinomialnb__alpha = {multinomialnb__alpha}
+              tfidfvectorizer__ngram_range = {params.tfidfvectorizer__ngram_range},
+              multinomialnb_alpha = {params.multinomialnb_alpha}
               """)
 
-        trained_model = saving_model(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features,TRAINED_MODEL_DESTINATION_FILE_NAME)
-
-        print(f"Model saved in {TRAINED_MODEL_DESTINATION_FILE_NAME}")
-
-
-
+        trained_model = saving_model(X, y, params.tfidfvectorizer__ngram_range, params.multinomialnb__alpha, min_df, max_df, max_features,params.TRAINED_MODEL_DESTINATION_FILE_NAME)
+        print(f"Model saved in {params.TRAINED_MODEL_DESTINATION_FILE_NAME}")
 
 
     # Calculate the end time and time taken
@@ -267,15 +242,13 @@ if __name__ == "__main__":
     print(f"It took: {round(length,0)} seconds")
 
 
+
 # while we wait for trained models, models that randomly returns fake or real
 def model_text_only():
     return random.randint(0, 1)
-
 def model_title_only():
     return random.randint(0, 1)
-
 def model_both():
     return random.randint(0, 1)
-
 def model_vote():
     return random.randint(0, 1)
