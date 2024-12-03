@@ -19,6 +19,8 @@ from tensorflow.keras.layers import Embedding, LSTM, Dense, Dropout, Bidirection
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from gensim.test.utils import common_texts
 from gensim.models import Word2Vec
+from FakeNews_packages import params
+from FakeNews_packages.data import get_data
 
 raw_data_path = os.fspath('/home/toji/code/CarolePon/fncm/raw_data')
 dataset_path=os.path.join(raw_data_path,'Fake_News_kaggle_english.csv')
@@ -257,7 +259,8 @@ def train_and_save_model(model, X, y, model_dir='model_checkpoint', batch_size=3
 
 def main():
     """get data, clean it, assign X,y"""
-    data = pd.read_csv(dataset_path)
+    data = get_data(params.SOURCE_DATA, params.BUCKET_NAME, params.SOURCE_BLOB_NAME,params.DESTINATION_FILE_NAME, params.columns)
+
     data_clean=get_clean_df(data,col_to_analyze,max_words)
     X=data_clean[col_to_analyze][:128]
     y=data_clean['label'][:128]
