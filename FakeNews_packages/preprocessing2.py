@@ -7,8 +7,8 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List
-from params import *
-from data import get_data_text_title_df
+from FakeNews_packages import params
+from FakeNews_packages.data import get_data_text_title_df
 import nltk
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -205,8 +205,8 @@ FILE= '/home/toji/code/CarolePon/fncm/raw_data/Fake_News_kaggle_english.csv'
 def preproc_training(text:bool, title:bool, both:bool): #text, or title, or both takes 1 and the other takes zeros
     df= get_data_text_title_df()
     df = drop_na(df)
-    df = lim_nb_of_words_title(df, column_title, high_lim_title, low_lim_title)
-    df = lim_nb_of_words_article(df, column_article, high_lim_article, low_lim_article)
+    df = lim_nb_of_words_title(df, params.column_title, params.high_lim_title, params.low_lim_title)
+    df = lim_nb_of_words_article(df, params.column_title, params.high_lim_title, params.low_lim_title)
 
     if title:
         df = column_choice(df, 1, 0, 0)
@@ -217,24 +217,24 @@ def preproc_training(text:bool, title:bool, both:bool): #text, or title, or both
 
     """make a list of the df columns to preprocess"""
     preproc_columns = df.columns.drop('label')
-    preproc_params={'clean_txt': clean_text,
-                    'strip': Strip,
-                    'remove_links_bool': rem_links,
-                    'remove_selected_words_bool': rem_sel_words,
-                    'list_words_to_remove': word_list,
-                    'lower': lower,
-                    'remove_digits': rem_dig,
-                    'remove_punctuation': rem_pun,
-                    'keep_hashtags': keep_h,
-                    'tokenize': tokens,
-                    'stopwords': stpwords,
-                    'language': language,
-                    'lemmatize': lemmat,
-                    'nouns': nouns,
-                    'verbs': verbs,
-                    'adjectives': adjectives,
-                    'satellite_adjectives': sat_adj,
-                    'reassemble_txt': reassemble_txt
+    preproc_params={'clean_txt': params.clean_text,
+                    'strip': params.Strip,
+                    'remove_links_bool': params.rem_links,
+                    'remove_selected_words_bool': params.rem_sel_words,
+                    'list_words_to_remove': params.word_list,
+                    'lower': params.lower,
+                    'remove_digits': params.rem_dig,
+                    'remove_punctuation': params.rem_pun,
+                    'keep_hashtags': params.keep_h,
+                    'tokenize': params.tokens,
+                    'stopwords': params.stpwords,
+                    'language': params.language,
+                    'lemmatize': params.lemmat,
+                    'nouns': params.nouns,
+                    'verbs': params.verbs,
+                    'adjectives': params.adjectives,
+                    'satellite_adjectives': params.sat_adj,
+                    'reassemble_txt': params.reassemble_txt
                     }
 
 
@@ -247,24 +247,24 @@ def preproc_training(text:bool, title:bool, both:bool): #text, or title, or both
 # the input is the text and the booleans refer to the type you want as entries
 # the function return the preprocessed input to feed the model for the prediction
 def preproc_predict(input, text:bool, title:bool, both:bool):
-    preproc_params={'clean_txt': clean_text,
-                    'strip': Strip,
-                    'remove_links_bool': rem_links,
-                    'remove_selected_words_bool': rem_sel_words,
-                    'list_words_to_remove': word_list,
-                    'lower': lower,
-                    'remove_digits': rem_dig,
-                    'remove_punctuation': rem_pun,
-                    'keep_hashtags': keep_h,
-                    'tokenize': tokens,
-                    'stopwords': stpwords,
-                    'language': language,
-                    'lemmatize': lemmat,
-                    'nouns': nouns,
-                    'verbs': verbs,
-                    'adjectives': adjectives,
-                    'satellite_adjectives': sat_adj,
-                    'reassemble_txt': reassemble_txt
+    preproc_params={'clean_txt': params.clean_text,
+                    'strip': params.Strip,
+                    'remove_links_bool': params.rem_links,
+                    'remove_selected_words_bool': params.rem_sel_words,
+                    'list_words_to_remove': params.word_list,
+                    'lower': params.lower,
+                    'remove_digits': params.rem_dig,
+                    'remove_punctuation': params.rem_pun,
+                    'keep_hashtags': params.keep_h,
+                    'tokenize': params.tokens,
+                    'stopwords': params.stpwords,
+                    'language': params.language,
+                    'lemmatize': params.lemmat,
+                    'nouns': params.nouns,
+                    'verbs': params.verbs,
+                    'adjectives': params.adjectives,
+                    'satellite_adjectives': params.sat_adj,
+                    'reassemble_txt': params.reassemble_txt
                     }
     if type(input)==str:
         if text:

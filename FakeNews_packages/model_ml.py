@@ -8,8 +8,8 @@ from sklearn.pipeline import make_pipeline
 from FakeNews_packages.data import get_data
 from scipy import stats
 import random
+from FakeNews_packages import params
 
-from params import *
 
 
 # for the timer to be displayed:
