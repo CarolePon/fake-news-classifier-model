@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from FakeNews_packages.data import get_data
 from scipy import stats
-
+import random
 
 from params import *
 
@@ -217,3 +217,17 @@ if __name__ == "__main__":
     length = end - start
     # Show the results : this can be altered however you like
     print(f"It took: {round(length,0)} seconds")
+
+
+# while we wait for trained models, models that randomly returns fake or real
+def model_text_only():
+    return random.randint(0, 1)
+
+def model_title_only():
+    return random.randint(0, 1)
+
+def model_both():
+    return random.randint(0, 1)
+
+def model_vote():
+    return random.randint(0, 1)
