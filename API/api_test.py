@@ -22,14 +22,14 @@ class PredictionRequest(BaseModel):
     text_input_string: str = None  # Optional
 
 
-@app.post('/')
+@app.get('/')
 def index():
     return {'ok': True}
 
 
-@app.get('/predict')
+@app.post('/predict')
 def predict(request: PredictionRequest):
-    preint (f"Received request: {request}")
+    print (f"Received request: {request}")
 
     """
     Prediction endpoint for fake news classification.
@@ -49,12 +49,12 @@ def predict(request: PredictionRequest):
     # Case 1: Both title and text are provided
     if title and text:
         # Preprocess inputs
-        title_preprocessed = preprocessing2.preproc_predict(title)
-        text_preprocessed = preprocessing2.preproc_predict(text)
+        # title_preprocessed = preprocessing2.preproc_predict(title)
+        # text_preprocessed = preprocessing2.preproc_predict(text)
 
         # Get predictions from all models UNCOMMENT ONCE WE HAVE MODELS
         title_result = model_ml.model_title_only()
-        text_result = model_ml.model_text_only
+        text_result = model_ml.model_text_only()
         combined_result = model_ml.model_both()
         # title_result = model_title_only.predict([title_preprocessed])[0]
         # text_result = model_text_only.predict([text_preprocessed])[0]
@@ -74,7 +74,7 @@ def predict(request: PredictionRequest):
 
     # Case 2: Only title is provided
     elif title:
-        title_preprocessed = preprocessing2.preproc_predict(title)
+        # title_preprocessed = preprocessing2.preproc_predict(title)
 
         title_result = model_ml.model_title_only()  #.predict([title_preprocessed])[0] UNCOMMENT W+OCNE WE HAVE MODELS
         #response["final_result"] = title_result UNCOMMENT ONCE WE HAVE MODELS
@@ -82,7 +82,7 @@ def predict(request: PredictionRequest):
 
     # Case 3: Only text is provided
     elif text:
-        text_preprocessed = preprocessing2.preproc_predict(text)
+        # text_preprocessed = preprocessing2.preproc_predict(text)
         text_result = model_ml.model_text_only()  #.predict([text_preprocessed])[0] UNCOMMENT W+OCNE WE HAVE MODELS
         response = {"text_model_result": text_result, "final_result": text_result} #DEL ONCE WE HAVE THE MODELS
         #response["final_result"] = text_result UNCOMMENT ONCE WE HAVE MDOELS
