@@ -71,8 +71,13 @@ BUCKET_NAME = "fnsm"
 #name of the file in the bucket = blob name
 SOURCE_BLOB_NAME = DATA_FILE
 # destination_file_name: The path and name where the file will be saved locally on the VM:
-DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model"
-columns = ["text","label"]
+DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model.csv"
+
+# File path and file name to store the fitted and trained model
+TRAINED_MODEL_DESTINATION_FILE_NAME = "../raw_data/Trained_ML_model"
+
+# which column to select
+columns = ["text","label"]  # or "title"
 
 
 # ML parameters found with 30,000 samples
