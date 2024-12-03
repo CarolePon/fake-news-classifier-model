@@ -30,11 +30,13 @@ def get_data(SOURCE_DATA, BUCKET_NAME, SOURCE_BLOB_NAME, DESTINATION_FILE_NAME, 
 
         print(f"data_path = {path_for_temp_csv}")
 
-        data_from_gcs = pd.read_csv(path_for_temp_csv)
+        data_from_gcs = pd.read_csv(path_for_temp_csv, index_col=0)
 
-        data_from_gcs = data_from_gcs.dropna()
+        data_selected_col = data[columns]
 
-        return data_from_gcs
+        data_selected_col = data_selected_col.dropna()
+
+        return data_selected_col
 
 
 
