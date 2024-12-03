@@ -61,7 +61,7 @@ reassemble_txt = True
 
 # get the data: either from a local csv or a csv in a bucket in CGP
 # if from locally saved file:
-SOURCE_DATA = "local"   # =  "gcs" or "local"
+SOURCE_DATA = "gps"   # =  "gcs" or "local"
 #file nalme for data=
 DATA_FILE = "FN_preproc_text.csv"
 # file path where the data is locally saved:
@@ -74,12 +74,12 @@ SOURCE_BLOB_NAME = DATA_FILE
 DESTINATION_FILE_NAME = "../raw_data/Temp_raw_data_model.csv"
 
 # File path and file name to store the fitted and trained model
-TRAINED_MODEL_DESTINATION_FILE_NAME = "../raw_data/Trained_ML_model"
+TRAINED_MODEL_DESTINATION_FILE_NAME = "../raw_data/Trained_ML_model.pkl"
 
 # which column to select
 columns = ["text","label"]  # or "title"
 
 
 # ML parameters found with 30,000 samples
-tfidfvectorizer__ngram_range = (2, 3)
-multinomialnb__alpha = 0.1
+tfidfvectorizer__ngram_range = (1,3)
+multinomialnb__alpha = 0.221076
