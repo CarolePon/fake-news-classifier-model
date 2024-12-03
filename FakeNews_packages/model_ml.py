@@ -95,7 +95,6 @@ def hyperparams(X, y, min_df, max_df, max_features):
 #recherche des meilleurs parametres
 def model_ml(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features):
 
-    print("Running model with best params (found from grid search on sample =30,000): \n    tfidfvectorizer__ngram_range = {tfidfvectorizer__ngram_range}, \n  multinomialnb__alpha = {multinomialnb__alpha}")
 
     # Pipe
     pipeline_naive_bayes = make_pipeline(
@@ -103,12 +102,7 @@ def model_ml(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, m
         MultinomialNB(alpha = multinomialnb__alpha)
         )
 
-    print("no grid search, running model with best params")
-
     fitted_pipe = pipeline_naive_bayes.fit(X,y)
-
-
-    #ngrams = grid_search.best_estimator_.get_params()['tfidfvectorizer__ngram_range']
 
     vect = TfidfVectorizer(ngram_range=tfidfvectorizer__ngram_range,min_df= min_df, max_df=max_df,max_features=max_features)
     vect_fitted=vect.fit(X,y)
@@ -123,8 +117,7 @@ def model_ml(X, y, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, m
     #     print(f"vectorized X shape = {X_transformed.shape}")
 
     print("returns fitted_pipe, vect_fitted :")
-    #return grid_search.best_estimator_, vect_fitted #, grid_search.best_score_
-    return fitted_pipe, vect_fitted #, grid_search.best_score_
+    return fitted_pipe, vect_fitted
 
 
 
@@ -142,8 +135,8 @@ if __name__ == "__main__":
     print(f"data shape : {data_cleaned.shape}")
 
 
-    sample_nb = data_cleaned.shape[0]
-    #sample_nb = 1000
+    #sample_nb = data_cleaned.shape[0]
+    sample_nb = 1000
     sample_data_cleaned = sample_2(data_cleaned,sample_nb)
 
     # print info if the model is run opn the whole datset ofr a sample
@@ -176,22 +169,46 @@ if __name__ == "__main__":
     max_df = 0.5
     max_features = int(X.shape[0]/2)
 
-    #Grid search with the above parameters
-    print(f"Running Grid Search pipeline to get the best model parameters")
-    best_pipeline,vect_fitted = hyperparams(X_train,y_train, min_df, max_df, max_features)
 
-    #fitted_pipe, vect_fitted = model_ml(X_train, y_train, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features)
-
-    vectorize_text,y = vectorize(X_test, y_test,vect_fitted)
-    #print(f"vectorize_text_test shape : {vectorize_text.shape}")
+    # 2 options: run grid search or train model
+    action = "gridsearch"   # model or gridsearch
 
 
-    y_test_predict=(best_pipeline.predict(vectorize_text))
-    #y_test_predict=(fitted_pipe.predict(vectorize_text))
+    if action == "gridsearch":
+        #Grid search with the above parameters
+        print(f"Running Grid Search pipeline to get the best model parameters")
+        best_pipeline,vect_fitted = hyperparams(X_train,y_train, min_df, max_df, max_features)
 
-    print(f"for sample number ={sample_nb}")
-    print(best_pipeline.score(X_test, y_test))
-    #print(fitted_pipe.score(X_test, y_test))
+        vectorize_text,y = vectorize(X_test, y_test,vect_fitted)
+        print(f"vectorize_X_test shape : {vectorize_text.shape}")
+
+        y_test_predict=(best_pipeline.predict(vectorize_text))
+
+        print(f"for sample number ={sample_nb}")
+        print(f"result of gridsearch: best pipeline score: {best_pipeline.score(X_test, y_test)}")
+
+
+
+    if action == "model":
+        #running model with parameters chosen after grid search
+        print(f"""Running model with best params (found from grid search on sample =30,000):
+              tfidfvectorizer__ngram_range = {tfidfvectorizer__ngram_range},
+              multinomialnb__alpha = {multinomialnb__alpha}
+              """)
+
+        # run the model
+        fitted_pipe, vect_fitted = model_ml(X_train, y_train, tfidfvectorizer__ngram_range, multinomialnb__alpha, min_df, max_df, max_features)
+
+        # apply to  the test data
+        vectorize_text,y = vectorize(X_test, y_test,vect_fitted)
+        print(f"vectorize_text_test shape : {vectorize_text.shape}")
+
+
+        # get prediction
+        y_test_predict=(fitted_pipe.predict(vectorize_text))
+
+        print(f"for sample number ={sample_nb}")
+        print(f"result of model run with the gridsearch best parameters: {fitted_pipe.score(X_test, y_test)}")
 
 
 
