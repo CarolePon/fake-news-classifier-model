@@ -13,6 +13,15 @@ background-size: cover;
 
 "changes to variabilize the inputs of the user and thus for the output to adapt if we have both the title and the article"
 
+image_path = "streamlit/streamlit_illustration.jpg"
+# Display an image saved locally
+# Create 4 columns
+col1, col2, col3, col4 = st.columns(4)
+# Place the image in one column (e.g., col1 for the first quarter)
+with col1:
+    st.image(image_path, caption="Illustration Image", use_column_width=True)
+
+
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Titre de l'application
