@@ -79,6 +79,9 @@ TRAINED_MODEL_DESTINATION_FILE_NAME = "../raw_data/Trained_ML_model.pkl"
 # which column to select
 columns = ["text","label"]  # or "title"
 
+MODEL_FILE = "Trained_ML_model_FN_preproc_text.pkl"
+LOCAL_FILE_PATH_MODEL_ML = f"../raw_data/{MODEL_FILE}"
+
 
 # ML parameters found from the grid search
 tfidfvectorizer__ngram_range = (1,3)

@@ -5,7 +5,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn import set_config; set_config("diagram")
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
-from FakeNews_packages.data import get_data
+from FakeNews_packages.data import get_data, get_data_local
 import pickle  # to save the best model once fitted
 from scipy import stats
 import random
@@ -130,6 +130,7 @@ def saving_model(X, y,
 
 
 
+
 if __name__ == "__main__":
 
 
@@ -177,7 +178,12 @@ if __name__ == "__main__":
     # 3 options: run grid search, train model (and compare y_test and y_predict) or Save model
     #action = "gridsearch"
     # action = "model"
-    action = "save_model"
+    # action = "save_model"
+    action = 'run_model'
+
+    columns = ["text","label"]
+    # columns = '["title","label"]
+    # columns = ['text_and_title'"label"]
 
 
     if action == "gridsearch":
@@ -237,6 +243,22 @@ if __name__ == "__main__":
                                      max_features,
                                      params.TRAINED_MODEL_DESTINATION_FILE_NAME)
         print(f"Model saved in {params.TRAINED_MODEL_DESTINATION_FILE_NAME}")
+
+    if  action == 'run_model':
+            data = get_data_local(columns)
+            #print(data.head(3))
+
+            # Load the model using pickle
+            with open(params.LOCAL_FILE_PATH_MODEL_ML, 'rb') as file:
+                trained_model_ml = pickle.load(file)
+
+            # Check if the model loaded correctly (optional)
+            print(f"Loaded model: {trained_model_ml}")
+
+            print(f"Model Score: {trained_model_ml.score(X_test, y_test)}")
+
+
+
 
 
     # Calculate the end time and time taken
