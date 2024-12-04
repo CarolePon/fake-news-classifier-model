@@ -2,23 +2,23 @@ import streamlit as st
 import requests
 
 
-page_bg_img = '''
-<style>
-[data-testid="stAppViewContainer"] {
-background-image: url("https://plus.unsplash.com/premium_photo-1707774568376-b146c6bf79f0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-background-size: cover;
-}
-</style>
-'''
+# page_bg_img = '''
+# <style>
+# [data-testid="stAppViewContainer"] {
+# background-image: url("https://plus.unsplash.com/premium_photo-1707774568376-b146c6bf79f0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+# background-size: cover;
+# }
+# </style>
+# '''
 
 "changes to variabilize the inputs of the user and thus for the output to adapt if we have both the title and the article"
 
 image_path = "streamlit/streamlit_illustration.jpg"
 # Display an image saved locally
 # Create 4 columns
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 # Place the image in one column (e.g., col1 for the first quarter)
-with col1:
+with col2:
     st.image(image_path, caption="Illustration Image", use_column_width=True)
 
 
