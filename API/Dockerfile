@@ -1,11 +1,16 @@
 # Use the official Python image from Docker Hub
 FROM python:3.10.6-buster
 
-
+# Set the working directory
+WORKDIR /app
 
 # Copy the application code to the container
-COPY api_test.py /api_test.py
-COPY requirements.txt /requirements.txt
+COPY API/api_test.py /app/api_test.py
+COPY API/requirements.txt /app/requirements.txt
+COPY FakeNews_packages/preprocessing2.py /app/FakeNews_packages/
+COPY FakeNews_packages/model_ml.py /app/FakeNews_packages/
+COPY FakeNews_packages/model_dl.py /app/FakeNews_packages/
+COPY FakeNews_packages/params.py /app/FakeNews_packages/
 
 # Install dependencies (including FastAPI and Uvicorn)
 RUN pip install --upgrade pip

@@ -36,11 +36,11 @@ def predict(request: PredictionRequest):
     """
 
     # Preprocess inputs
-    title = request.title_input_string.strip() if request.title_input_string else None
+    # title = request.title_input_string.strip() if request.title_input_string else None
     text = request.text_input_string.strip() if request.text_input_string else None
-
+    title = request.title_input_string.strip() if request.title_input_string else None
     # Check if at least one input is provided
-    if not title and not text:
+    if not text:
         raise HTTPException(status_code=400, detail="At least one of 'title_input_string' or 'text_input_string' must be provided.")
 
     # Initialize response structure

@@ -63,7 +63,7 @@ reassemble_txt = True
 # if from locally saved file:
 SOURCE_DATA = "gps"   # =  "gcs" or "local"
 #file nalme for data=
-DATA_FILE = "FN_preproc_text.csv"
+DATA_FILE = "FN_preproc_title.csv"
 # file path where the data is locally saved:
 LOCAL_FILE_PATH = f"../raw_data/{DATA_FILE}"
 # bucket where the data is saved on gcs:

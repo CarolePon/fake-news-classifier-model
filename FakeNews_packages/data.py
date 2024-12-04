@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from google.cloud import storage
 from FakeNews_packages import params
+from raw_data import
 
 
 # function to get the data either from local file or from the GCP bucket
@@ -79,7 +80,6 @@ def get_data_local(columns):
     print(f"✅ Data loaded into dataframe with selected column only, shape {data_selected_col.shape}")
 
     return data_selected_col
-
 
 
 

@@ -275,6 +275,3 @@ def model_title_only():
 
 def model_both():
     return random.randint(0, 1)
-
-def model_vote():
-    return random.randint(0, 1)
